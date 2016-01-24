@@ -1,10 +1,12 @@
 swagger: '2.0'
 info:
-  version: 1.0.0
+  version: 3.0.0
   title: Zotero Web API
   description: |
     #### Test
     Test for a Swagger Interface of the Zotero Web API https://www.zotero.org/support/dev/web_api/v3/basics
+    
+    Edit the configuration at https://github.com/zuphilip/swagger-ui/blob/gh-pages/test/specs/zotero.yaml
     
     Adapted https://github.com/stadja/cowaboo see also http://stadja.net:81/cowaboo-swagger/#!/zotero/
 schemes:
@@ -785,93 +787,30 @@ paths:
         x-is-map: false
         enum:
         - json
+        - atom
+        - bib
+        - keys
+        - versions
         type: string
         description: Answer format.
-      - name: itemType
+      - name: include
         in: query
         required: false
         x-is-map: false
         type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
+        description: Formats to include in the response (for format=json).
+      - name: content
         in: query
         required: false
         x-is-map: false
         type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
+        description: Formats to include in the response (for format=atom).
+      - name: style
         in: query
         required: false
         x-is-map: false
         type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        description: Citation style to use for formatted references. Can be either the file name (without the .csl extension) of one of the styles in the Zotero Style Repository (e.g., apa) or the URL of a remote CSL file. 
       responses:
         200:
           description: ok
