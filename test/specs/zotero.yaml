@@ -1,0 +1,3153 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Zotero Web API
+  description: |
+    #### Test
+    Test for a Swagger Interface of the Zotero Web API https://www.zotero.org/support/dev/web_api/v3/basics
+    
+    Adapted https://github.com/stadja/cowaboo see also http://stadja.net:81/cowaboo-swagger/#!/zotero/
+schemes:
+- https
+host: api.zotero.org
+basePath: /
+securityDefinitions: {}
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+  - name: Items
+  - name: Collections
+  - name: Tags
+  - name: Searches
+  - name: Groups
+  - name: Schema
+    description: Item Type and Fields
+paths:
+  /itemTypes:
+    get:
+      description: Getting All Item Types
+      tags:
+        - Schema
+      operationId: GETgetItemTypes
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+  /itemFields:
+    get:
+      description: Getting All Item Fields
+      tags:
+        - Schema
+      responses:
+        200:
+          description: Ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+  /itemTypeFields:
+    get:
+      description: Getting All Valid Fields for an Item Type
+      tags:
+        - Schema
+      responses:
+        200:
+          description: Ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+      parameters:
+        - name: itemType
+          required: true
+          in: query
+          description: itemType
+          type: string
+  /itemTypeCreatorTypes:
+    get:
+      description: Getting Valid Creator Types for an Item Type
+      tags:
+        - Schema
+      responses:
+        200:
+          description: Ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+      parameters:
+        - name: itemType
+          required: true
+          in: query
+          description: itemType
+          type: string
+  /creatorFields:
+    get:
+      description: Getting Localized Creator Fields
+      tags:
+        - Schema
+      responses:
+        200:
+          description: Ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+  /items/new:
+    get:
+      description: Getting a Template for a New Item
+      tags:
+        - Schema
+      operationId: GETgetItemTemplate
+      parameters:
+      - name: itemType
+        in: query
+        required: true
+        x-is-map: false
+        default: webpage
+        type: string
+        description: Get all the item types by making <a href="#!/zotero/getItemTypes" target="_blank">an item type request</a>
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+  /users/{userId}/groups:
+    get:
+      description: The set of groups the current API key has access to
+      tags:
+        - Groups
+      operationId: GETgetGroupsFromUserId
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        x-is-map: false
+        default: '2214605'
+        type: string
+        description: User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses.
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/items:
+    get:
+      description: The set of all items in the library.
+      tags:
+        - Items
+      operationId: GETgetItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+    post:
+      description: Create a new item.
+      tags:
+        - Items
+      operationId: POSTcreateItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to post as a group or as an user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: body
+        in: body
+        required: true
+        x-is-map: false
+#        default: 
+#          [
+#            {
+#              "itemType": "webpage",
+#              "title": "",
+#              "creators": [
+#                {
+#                  "creatorType": "author",
+#                  "firstName": "",
+#                  "lastName": ""
+#                }
+#              ],
+#              "abstractNote": "",
+#              "websiteTitle": "",
+#              "websiteType": "",
+#              "date": "",
+#              "shortTitle": "",
+#              "url": "",
+#              "accessDate": "",
+#              "language": "",
+#              "rights": "",
+#              "extra": "",
+#              "tags": [],
+#              "collections": [],
+#              "relations": []
+#            }
+#          ]
+        description: Get the new item description by calling <a href="#!/zotero/getItemTemplate" target="_blank">an item template request</a>. Then modify it and resubmit it to the server in an array.
+        schema: {}
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        409:
+          description: 'Conflict: The target library is locked.'
+        412:
+          description: 'Precondition Failed: The provided Zotero-Write-Token has already been submitted.'
+        413:
+          description: 'Request Entity Too Large: Too many items submitted'
+  /{users_or_groups}/{elementId}/items/top:
+    get:
+      description: The set of all top-level items in the library.
+      tags:
+        - Items
+      operationId: GETgetTopItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/items/trash:
+    get:
+      description: The set of items in the trash.
+      tags:
+        - Items
+      operationId: GETgetTrashItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/items/{itemKey}:
+    get:
+      description: The set of all items in the library.
+      tags:
+        - Items
+      operationId: GETgetSpecificItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: itemKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific Item in the library.
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+    delete:
+      description: Doesn't Work - Deleting an item.
+      tags:
+        - Items
+      operationId: DELETEdeleteItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to delete as a group or as an user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: itemKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific Item in the library.
+      - name: If-Unmodified-Since-Version
+        in: header
+        required: true
+        x-is-map: false
+        type: integer
+        format: int64
+        description: Item's current version number
+      responses:
+        200:
+          description: ok
+        409:
+          description: 'Conflict: The target library is locked.'
+        412:
+          description: 'Precondition Failed: The item has changed since retrieval (i.e., the provided item version no longer matches).'
+    patch:
+      description: Updating an Existing Item.
+      tags:
+        - Items
+      operationId: PATCHupdateItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to patch as a group or as an user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: itemKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific Item in the library.
+      - name: body
+        in: body
+        required: true
+        x-is-map: false
+        description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
+        schema: {}
+      responses:
+        200:
+          description: ok
+        400:
+          description: 'Bad Request: Invalid type/field; unparseable JSON'
+        409:
+          description: 'Conflict: The target library is locked.'
+        412:
+          description: 'Precondition Failed: The item has changed since retrieval (i.e., the provided item version no longer matches).'
+  /{users_or_groups}/{elementId}/items/{itemKey}/children:
+    get:
+      description: The set of all child items under a specific item.
+      tags:
+        - Items
+      operationId: GETgetChildItemsOfSpecificItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: itemKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific Item in the library.
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/items/{itemKey}/tags:
+    get:
+      description: The set of all tags associated with a specific item.
+      tags:
+        - Tags
+      operationId: GETgetTagsOfSpecificItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: itemKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific Item in the library.
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/tags:
+    get:
+      description: The set of all tags in the library.
+      tags:
+        - Tags
+      operationId: GETgetTags
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/tags/{tagName}:
+    get:
+      description: The set of tags (i.e., of all types) matching a specific name.
+      tags:
+        - Tags
+      operationId: GETgetSPecificTag
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: tagName
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: Url encoded tag name
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/collections:
+    get:
+      description: The set of collections in the library.
+      tags:
+        - Collections
+      operationId: GETgetCollections
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        default: 3k89ouyqI6vYIkTsgPJTK4ek
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+    post:
+      description: Create a collection.
+      tags:
+        - Collections
+      operationId: POSTcreateCollection
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to post as a group or as an user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: body
+        in: body
+        required: true
+        x-is-map: false
+#        default: >-
+#          [
+#            {
+#              "name" : "My Collection",
+#              "parentCollection" : false
+#            }
+#          ]
+        description: The Collection information
+        schema: {}
+      responses:
+        200:
+          description: ok
+        409:
+          description: 'Conflict: The target library is locked'
+        412:
+          description: 'Precondition Failed: The provided Zotero-Write-Token has already been submitted.'
+  /{users_or_groups}/{elementId}/collections/top:
+    get:
+      description: The set of all top-level collections in the library.
+      tags:
+        - Collections
+      operationId: GETgetTopCollections
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/collections/{collectionKey}:
+    get:
+      description: A specific collection in the library.
+      tags:
+        - Collections
+      operationId: GETgetSpecificCollection
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: collectionKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific collection in the library
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+    put:
+      description: Doesn't Work - Modify a specific collection in the library.
+      tags:
+        - Collections
+      operationId: PUTupdateCollection
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to put as a group or as an user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: collectionKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific collection in the library
+      - name: body
+        in: body
+        required: true
+        x-is-map: false
+#        default: >-
+#          {
+#            "key" : "DM2F65CA",
+#            "version" : 156,
+#            "name" : "My Collection",
+#            "parentCollection" : false
+#          }
+        description: First, <a href="#!/zotero/getSpecificCollection" target="_blank">retrieve the current version of the collection</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
+        schema: {}
+      responses:
+        200:
+          description: ok
+        409:
+          description: 'Conflict: The target library is locked'
+        412:
+          description: 'Precondition Failed: The provided Zotero-Write-Token has already been submitted.'
+    delete:
+      description: Doesn't Work - delete a specific collection in the library.
+      tags:
+        - Collections
+      operationId: DELETEdeleteCollection
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to put as a group or as an user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: collectionKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific collection in the library
+      - name: If-Unmodified-Since-Version
+        in: header
+        required: true
+        x-is-map: false
+        type: integer
+        format: int64
+        description: Collection's current version number
+      responses:
+        200:
+          description: ok
+        409:
+          description: 'Conflict: The target library is locked'
+        412:
+          description: 'Precondition Failed: The provided Zotero-Write-Token has already been submitted.'
+  /{users_or_groups}/{elementId}/collections/{collectionKey}/collections:
+    get:
+      description: The set of subcollections within a specific collection in the library.
+      tags:
+        - Collections
+      operationId: GETgetSpecificCollectionSubCollections
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: collectionKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific collection in the library
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/collections/{collectionKey}/items:
+    get:
+      description: The set of all items within a specific collection in the library.
+      tags:
+        - Collections
+      operationId: GETgetSpecificCollectionItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: collectionKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific collection in the library
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/collections/{collectionKey}/items/top:
+    get:
+      description: The set of top-level items within a specific collection in the library.
+      tags:
+        - Collections
+      operationId: GETgetSpecificCollectionTopItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: collectionKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific collection in the library
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/collections/{collectionKey}/tags:
+    get:
+      description: The set of tags within a specific collection in the library.
+      tags:
+        - Tags
+      operationId: GETgetSpecificCollectionTags
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: collectionKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific collection in the library
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/searches:
+    get:
+      description: The set of all saved searches in the library.
+      tags:
+        - Searches
+      operationId: GETgetSearches
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: itemType
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: q
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+      - name: qmode
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - everything
+        - titleCreatorYear
+        default: titleCreatorYear
+        type: string
+        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+      - name: since
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: 'Search parameter: Return only objects modified after the specified library verson.'
+      - name: tag
+        in: query
+        required: false
+        x-is-map: false
+        type: string
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+    post:
+      description: Create a new search.
+      tags:
+        - Searches
+      operationId: POSTcreateSearch
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: body
+        in: body
+        required: true
+        x-is-map: false
+#        default: >-
+#          [
+#            {
+#              "name": "My Search",
+#              "conditions": [
+#                {
+#                  "condition": "title",
+#                  "operator": "contains",
+#                  "value": "foo"
+#                },
+#                {
+#                  "condition": "date",
+#                  "operator": "isInTheLast",
+#                  "value": "7 days"
+#                }
+#              ]
+#            }
+#          ]
+        description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
+        schema: {}
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
+  /{users_or_groups}/{elementId}/searches/{searchKey}:
+    get:
+      description: A specific saved search in the library.
+      tags:
+        - Searches
+      operationId: GETgetSpecificSearch
+      parameters:
+      - name: users_or_groups
+        in: path
+        required: true
+        x-is-map: false
+        enum:
+        - groups
+        - users
+        type: string
+        description: Do you whant to make a search on a group or a user ?
+      - name: elementId
+        in: path
+        required: true
+        x-is-map: false
+        default: ''
+        type: string
+        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - name: key
+        in: query
+        required: true
+        x-is-map: false
+        type: string
+        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - name: searchKey
+        in: path
+        required: true
+        x-is-map: false
+        type: string
+        description: A specific saved search in the library.
+      - name: format
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - json
+        type: string
+        description: Answer format.
+      - name: sort
+        in: query
+        required: true
+        x-is-map: false
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+        default: dateModified
+        type: string
+        description: The name of the field by which entries are sorted.
+      - name: direction
+        in: query
+        required: false
+        x-is-map: false
+        enum:
+        - asc
+        - desc
+        type: string
+        description: The sorting direction of the field specified in the sort parameter.
+      - name: limit
+        in: query
+        required: false
+        x-is-map: false
+        default: 50
+        type: integer
+        format: int64
+        description: The maximum number of results to return with a single request
+      - name: start
+        in: query
+        required: false
+        x-is-map: false
+        default: 0
+        type: integer
+        format: int64
+        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+      responses:
+        200:
+          description: ok
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+        404:
+          description: Not Found
+        405:
+          description: Method Not Allowed
+        412:
+          description: Precondition Failed
+        417:
+          description: Expectation Failed
+        428:
+          description: Precondition Required
+        429:
+          description: Too Many Requests
+        default:
+          description: Internal Server Error
+        503:
+          description: Service Unavailable
