@@ -26,6 +26,7 @@ tags:
   - name: Groups
   - name: Schema
     description: Item Type and Fields
+# define paths with paremeter references which are defined below this section
 paths:
   /itemTypes:
     get:
@@ -230,22 +231,8 @@ paths:
         - Items
       operationId: GETgetItems
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -376,22 +363,8 @@ paths:
         - Items
       operationId: POSTcreateItem
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to post as a group or as an user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -459,22 +432,8 @@ paths:
         - Items
       operationId: GETgetTopItems
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -606,22 +565,8 @@ paths:
         - Items
       operationId: GETgetTrashItems
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -753,34 +698,15 @@ paths:
         - Items
       operationId: GETgetSpecificItem
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
         x-is-map: false
         type: string
         description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: itemKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific Item in the library.
+      - $ref: '#/parameters/ItemKey'
       - name: format
         in: query
         required: true
@@ -852,34 +778,15 @@ paths:
         - Items
       operationId: DELETEdeleteItem
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to delete as a group or as an user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
         x-is-map: false
         type: string
         description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: itemKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific Item in the library.
+      - $ref: '#/parameters/ItemKey'
       - name: If-Unmodified-Since-Version
         in: header
         required: true
@@ -900,34 +807,15 @@ paths:
         - Items
       operationId: PATCHupdateItem
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to patch as a group or as an user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
         x-is-map: false
         type: string
         description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: itemKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific Item in the library.
+      - $ref: '#/parameters/ItemKey'
       - name: body
         in: body
         required: true
@@ -950,34 +838,15 @@ paths:
         - Items
       operationId: GETgetChildItemsOfSpecificItem
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
         x-is-map: false
         type: string
         description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: itemKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific Item in the library.
+      - $ref: '#/parameters/ItemKey'
       - name: format
         in: query
         required: true
@@ -1103,34 +972,15 @@ paths:
         - Tags
       operationId: GETgetTagsOfSpecificItem
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
         x-is-map: false
         type: string
         description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: itemKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific Item in the library.
+      - $ref: '#/parameters/ItemKey'
       - name: format
         in: query
         required: true
@@ -1256,22 +1106,8 @@ paths:
         - Tags
       operationId: GETgetTags
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -1403,22 +1239,8 @@ paths:
         - Tags
       operationId: GETgetSPecificTag
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -1556,22 +1378,8 @@ paths:
         - Collections
       operationId: GETgetCollections
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -1703,22 +1511,8 @@ paths:
         - Collections
       operationId: POSTcreateCollection
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to post as a group or as an user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -1752,22 +1546,8 @@ paths:
         - Collections
       operationId: GETgetTopCollections
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -1899,22 +1679,8 @@ paths:
         - Collections
       operationId: GETgetSpecificCollection
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -2051,22 +1817,8 @@ paths:
         - Collections
       operationId: PUTupdateCollection
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to put as a group or as an user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -2105,22 +1857,8 @@ paths:
         - Collections
       operationId: DELETEdeleteCollection
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to put as a group or as an user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -2154,22 +1892,8 @@ paths:
         - Collections
       operationId: GETgetSpecificCollectionSubCollections
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -2307,22 +2031,8 @@ paths:
         - Collections
       operationId: GETgetSpecificCollectionItems
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -2460,22 +2170,8 @@ paths:
         - Collections
       operationId: GETgetSpecificCollectionTopItems
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -2613,22 +2309,8 @@ paths:
         - Tags
       operationId: GETgetSpecificCollectionTags
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -2766,22 +2448,8 @@ paths:
         - Searches
       operationId: GETgetSearches
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -2912,22 +2580,8 @@ paths:
         - Searches
       operationId: POSTcreateSearch
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -2990,22 +2644,8 @@ paths:
         - Searches
       operationId: GETgetSpecificSearch
       parameters:
-      - name: users_or_groups
-        in: path
-        required: true
-        x-is-map: false
-        enum:
-        - groups
-        - users
-        type: string
-        description: Do you whant to make a search on a group or a user ?
-      - name: elementId
-        in: path
-        required: true
-        x-is-map: false
-        default: ''
-        type: string
-        description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+      - $ref: '#/parameters/UsersOrGroups'
+      - $ref: '#/parameters/ElementId'
       - name: key
         in: query
         required: true
@@ -3100,3 +2740,30 @@ paths:
           description: Internal Server Error
         503:
           description: Service Unavailable
+# define reusable parameters:
+parameters:
+  UsersOrGroups:
+    name: users_or_groups
+    in: path
+    required: true
+    x-is-map: false
+    enum:
+      - groups
+      - users
+    type: string
+    description: Do you want to make a search on a group or a user?
+  ElementId:
+    name: elementId
+    in: path
+    required: true
+    x-is-map: false
+    default: ''
+    type: string
+    description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+  ItemKey:
+    name: itemKey
+    in: path
+    required: true
+    x-is-map: false
+    type: string
+    description: A specific Item in the library.
