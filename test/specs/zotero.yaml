@@ -116,76 +116,26 @@ paths:
         - Groups
       operationId: GETgetGroupsFromUserId
       parameters:
-      - name: userId
-        in: path
-        required: true
-        x-is-map: false
-        default: '2214605'
-        type: string
-        description: User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses.
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - name: userId
+          in: path
+          required: true
+          x-is-map: false
+          default: '2214605'
+          type: string
+          description: User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses.
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -200,76 +150,31 @@ paths:
         - Items
       operationId: GETgetItems
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -352,76 +257,31 @@ paths:
         - Items
       operationId: GETgetTopItems
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -436,76 +296,31 @@ paths:
         - Items
       operationId: GETgetTrashItems
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -642,77 +457,32 @@ paths:
         - Items
       operationId: GETgetChildItemsOfSpecificItem
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - $ref: '#/parameters/ItemKey'
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - $ref: '#/parameters/ItemKey'
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -727,77 +497,32 @@ paths:
         - Tags
       operationId: GETgetTagsOfSpecificItem
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - $ref: '#/parameters/ItemKey'
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - $ref: '#/parameters/ItemKey'
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -812,76 +537,31 @@ paths:
         - Tags
       operationId: GETgetTags
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: ok
@@ -896,82 +576,37 @@ paths:
         - Tags
       operationId: GETgetSPecificTag
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: tagName
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: Url encoded tag name
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: tagName
+          in: path
+          required: true
+          x-is-map: false
+          type: string
+          description: Url encoded tag name
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -986,77 +621,32 @@ paths:
         - Collections
       operationId: GETgetCollections
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        default: 3k89ouyqI6vYIkTsgPJTK4ek
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          default: 3k89ouyqI6vYIkTsgPJTK4ek
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -1105,76 +695,31 @@ paths:
         - Collections
       operationId: GETgetTopCollections
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -1189,82 +734,37 @@ paths:
         - Collections
       operationId: GETgetSpecificCollection
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: collectionKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific collection in the library
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: collectionKey
+          in: path
+          required: true
+          x-is-map: false
+          type: string
+          description: A specific collection in the library
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -1353,82 +853,37 @@ paths:
         - Collections
       operationId: GETgetSpecificCollectionSubCollections
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: collectionKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific collection in the library
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: collectionKey
+          in: path
+          required: true
+          x-is-map: false
+          type: string
+          description: A specific collection in the library
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -1443,82 +898,37 @@ paths:
         - Collections
       operationId: GETgetSpecificCollectionItems
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: collectionKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific collection in the library
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: collectionKey
+          in: path
+          required: true
+          x-is-map: false
+          type: string
+          description: A specific collection in the library
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -1533,82 +943,37 @@ paths:
         - Collections
       operationId: GETgetSpecificCollectionTopItems
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: collectionKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific collection in the library
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: collectionKey
+          in: path
+          required: true
+          x-is-map: false
+          type: string
+          description: A specific collection in the library
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -1623,82 +988,37 @@ paths:
         - Tags
       operationId: GETgetSpecificCollectionTags
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: collectionKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific collection in the library
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: collectionKey
+          in: path
+          required: true
+          x-is-map: false
+          type: string
+          description: A specific collection in the library
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -1713,76 +1033,31 @@ paths:
         - Searches
       operationId: GETgetSearches
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - $ref: '#/parameters/ItemType-Search'
-      - $ref: '#/parameters/Q'
-      - $ref: '#/parameters/QMode'
-      - $ref: '#/parameters/Since'
-      - $ref: '#/parameters/Tag-Search'
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/ItemType-Search'
+        - $ref: '#/parameters/Q'
+        - $ref: '#/parameters/QMode'
+        - $ref: '#/parameters/Since'
+        - $ref: '#/parameters/Tag-Search'
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -1842,77 +1117,32 @@ paths:
         - Searches
       operationId: GETgetSpecificSearch
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: searchKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific saved search in the library.
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - name: sort
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - accessDate
-        - addedBy
-        - callNumber
-        - creator
-        - date
-        - dateAdded
-        - dateModified
-        - journalAbbreviation
-        - language
-        - libraryCatalog
-        - numItems
-        - publicationTitle
-        - publisher
-        - rights
-        - title
-        - type
-        default: dateModified
-        type: string
-        description: The name of the field by which entries are sorted.
-      - name: direction
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - asc
-        - desc
-        type: string
-        description: The sorting direction of the field specified in the sort parameter.
-      - name: limit
-        in: query
-        required: false
-        x-is-map: false
-        default: 50
-        type: integer
-        format: int64
-        description: The maximum number of results to return with a single request
-      - name: start
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - name: key
+          in: query
+          required: true
+          x-is-map: false
+          type: string
+          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - name: searchKey
+          in: path
+          required: true
+          x-is-map: false
+          type: string
+          description: A specific saved search in the library.
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/Sort'
+        - $ref: '#/parameters/Direction'
+        - $ref: '#/parameters/Limit'
+        - $ref: '#/parameters/Start'
       responses:
         200:
           description: OK
@@ -1996,3 +1226,56 @@ parameters:
     x-is-map: false
     type: string
     description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+  Sort:
+    name: sort
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+      - accessDate
+      - addedBy
+      - callNumber
+      - creator
+      - date
+      - dateAdded
+      - dateModified
+      - journalAbbreviation
+      - language
+      - libraryCatalog
+      - numItems
+      - publicationTitle
+      - publisher
+      - rights
+      - title
+      - type
+    default: dateModified
+    type: string
+    description: The name of the field by which entries are sorted.
+  Direction:
+    name: direction
+    in: query
+    required: false
+    x-is-map: false
+    enum:
+      - asc
+      - desc
+    type: string
+    description: The sorting direction of the field specified in the sort parameter.
+  Limit:
+    name: limit
+    in: query
+    required: false
+    x-is-map: false
+    default: 50
+    type: integer
+    format: int64
+    description: The maximum number of results to return with a single request
+  Start:
+    name: start
+    in: query
+    required: false
+    x-is-map: false
+    default: 0
+    type: integer
+    format: int64
+    description: The index of the first result. Combine with the limit parameter to select a slice of the available results
