@@ -3,8 +3,9 @@ info:
   version: 3.0.0
   title: Zotero Web API
   description: |
-    #### Test
-    Test for a Swagger Interface of the Zotero Web API https://www.zotero.org/support/dev/web_api/v3/basics
+    Zotero Web API https://www.zotero.org/support/dev/web_api/v3/basics
+    
+    Test implementation in Swagger-UI by @zuphilip
     
     Edit the configuration at https://github.com/zuphilip/swagger-ui/blob/gh-pages/test/specs/zotero.yaml
     
@@ -36,7 +37,7 @@ paths:
       operationId: GETgetItemTypes
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
@@ -48,7 +49,7 @@ paths:
         - Schema
       responses:
         200:
-          description: Ok
+          description: OK
         304:
           description: Not Modified
         400:
@@ -60,17 +61,13 @@ paths:
         - Schema
       responses:
         200:
-          description: Ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
       parameters:
-        - name: itemType
-          required: true
-          in: query
-          description: itemType
-          type: string
+      - $ref: '#/parameters/ItemType'
   /itemTypeCreatorTypes:
     get:
       description: Getting Valid Creator Types for an Item Type
@@ -78,17 +75,13 @@ paths:
         - Schema
       responses:
         200:
-          description: Ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
       parameters:
-        - name: itemType
-          required: true
-          in: query
-          description: itemType
-          type: string
+      - $ref: '#/parameters/ItemType'
   /creatorFields:
     get:
       description: Getting Localized Creator Fields
@@ -96,7 +89,7 @@ paths:
         - Schema
       responses:
         200:
-          description: Ok
+          description: OK
         304:
           description: Not Modified
         400:
@@ -108,16 +101,10 @@ paths:
         - Schema
       operationId: GETgetItemTemplate
       parameters:
-      - name: itemType
-        in: query
-        required: true
-        x-is-map: false
-        default: webpage
-        type: string
-        description: Get all the item types by making <a href="#!/zotero/getItemTypes" target="_blank">an item type request</a>
+      - $ref: '#/parameters/ItemType'
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
@@ -201,29 +188,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/items:
     get:
       description: The set of all items in the library.
@@ -247,42 +216,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -334,29 +272,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
     post:
       description: Create a new item.
       tags:
@@ -414,7 +334,7 @@ paths:
         schema: {}
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
@@ -448,42 +368,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -535,29 +424,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/items/trash:
     get:
       description: The set of items in the trash.
@@ -581,42 +452,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -668,29 +508,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/items/{itemKey}:
     get:
       description: The set of all items in the library.
@@ -749,29 +571,11 @@ paths:
         description: Citation style to use for formatted references. Can be either the file name (without the .csl extension) of one of the styles in the Zotero Style Repository (e.g., apa) or the URL of a remote CSL file. 
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
     delete:
       description: Doesn't Work - Deleting an item.
       tags:
@@ -796,7 +600,7 @@ paths:
         description: Item's current version number
       responses:
         200:
-          description: ok
+          description: OK
         409:
           description: 'Conflict: The target library is locked.'
         412:
@@ -824,7 +628,7 @@ paths:
         schema: {}
       responses:
         200:
-          description: ok
+          description: OK
         400:
           description: 'Bad Request: Invalid type/field; unparseable JSON'
         409:
@@ -855,42 +659,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -942,29 +715,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/items/{itemKey}/tags:
     get:
       description: The set of all tags associated with a specific item.
@@ -989,42 +744,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -1076,29 +800,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/tags:
     get:
       description: The set of all tags in the library.
@@ -1122,42 +828,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -1214,24 +889,6 @@ paths:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/tags/{tagName}:
     get:
       description: The set of tags (i.e., of all types) matching a specific name.
@@ -1261,42 +918,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -1348,29 +974,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/collections:
     get:
       description: The set of collections in the library.
@@ -1395,42 +1003,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -1482,29 +1059,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
     post:
       description: Create a collection.
       tags:
@@ -1562,42 +1121,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -1649,29 +1177,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/collections/{collectionKey}:
     get:
       description: A specific collection in the library.
@@ -1701,42 +1211,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -1788,29 +1267,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
     put:
       description: Doesn't Work - Modify a specific collection in the library.
       tags:
@@ -1846,7 +1307,7 @@ paths:
         schema: {}
       responses:
         200:
-          description: ok
+          description: OK
         409:
           description: 'Conflict: The target library is locked'
         412:
@@ -1914,42 +1375,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -2001,29 +1431,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/collections/{collectionKey}/items:
     get:
       description: The set of all items within a specific collection in the library.
@@ -2053,42 +1465,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -2140,29 +1521,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/collections/{collectionKey}/items/top:
     get:
       description: The set of top-level items within a specific collection in the library.
@@ -2192,42 +1555,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -2279,29 +1611,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/collections/{collectionKey}/tags:
     get:
       description: The set of tags within a specific collection in the library.
@@ -2331,42 +1645,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -2418,29 +1701,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/searches:
     get:
       description: The set of all saved searches in the library.
@@ -2464,42 +1729,11 @@ paths:
         - json
         type: string
         description: Answer format.
-      - name: itemType
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
-      - name: q
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
-      - name: qmode
-        in: query
-        required: false
-        x-is-map: false
-        enum:
-        - everything
-        - titleCreatorYear
-        default: titleCreatorYear
-        type: string
-        description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
-      - name: since
-        in: query
-        required: false
-        x-is-map: false
-        default: 0
-        type: integer
-        format: int64
-        description: 'Search parameter: Return only objects modified after the specified library verson.'
-      - name: tag
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+      - $ref: '#/parameters/ItemType-Search'
+      - $ref: '#/parameters/Q'
+      - $ref: '#/parameters/QMode'
+      - $ref: '#/parameters/Since'
+      - $ref: '#/parameters/Tag-Search'
       - name: sort
         in: query
         required: true
@@ -2551,29 +1785,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
     post:
       description: Create a new search.
       tags:
@@ -2614,29 +1830,11 @@ paths:
         schema: {}
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
   /{users_or_groups}/{elementId}/searches/{searchKey}:
     get:
       description: A specific saved search in the library.
@@ -2717,29 +1915,11 @@ paths:
         description: The index of the first result. Combine with the limit parameter to select a slice of the available results
       responses:
         200:
-          description: ok
+          description: OK
         304:
           description: Not Modified
         400:
           description: Bad Request
-        403:
-          description: Forbidden
-        404:
-          description: Not Found
-        405:
-          description: Method Not Allowed
-        412:
-          description: Precondition Failed
-        417:
-          description: Expectation Failed
-        428:
-          description: Precondition Required
-        429:
-          description: Too Many Requests
-        default:
-          description: Internal Server Error
-        503:
-          description: Service Unavailable
 # define reusable parameters:
 parameters:
   UsersOrGroups:
@@ -2767,3 +1947,52 @@ parameters:
     x-is-map: false
     type: string
     description: A specific Item in the library.
+  ItemType:
+    name: itemType
+    in: query
+    required: true
+    x-is-map: false
+    default: webpage
+    type: string
+    description: Get all the item types by making <a href="#!/zotero/getItemTypes" target="_blank">an item type request</a>
+  ItemType-Search:
+    name: itemType
+    in: query
+    required: false
+    x-is-map: false
+    type: string
+    description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+  Q:
+    name: q
+    in: query
+    required: false
+    x-is-map: false
+    type: string
+    description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
+  QMode:
+    name: qmode
+    in: query
+    required: false
+    x-is-map: false
+    enum:
+      - everything
+      - titleCreatorYear
+    default: titleCreatorYear
+    type: string
+    description: 'Search parameter: Quick search mode. To include full-text content in the search, use everything. Searching of other fields will be possible in the future.'
+  Since:
+    name: since
+    in: query
+    required: false
+    x-is-map: false
+    default: 0
+    type: integer
+    format: int64
+    description: 'Search parameter: Return only objects modified after the specified library verson.'
+  Tag-Search:
+    name: tag
+    in: query
+    required: false
+    x-is-map: false
+    type: string
+    description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
