@@ -27,7 +27,9 @@ tags:
   - name: Groups
   - name: Schema
     description: Item Type and Fields
-# define paths with paremeter references which are defined below this section
+####################
+#   define PATHS   #
+####################
 paths:
   /itemTypes:
     get:
@@ -116,21 +118,8 @@ paths:
         - Groups
       operationId: GETgetGroupsFromUserId
       parameters:
-        - name: userId
-          in: path
-          required: true
-          x-is-map: false
-          default: '2214605'
-          type: string
-          description: User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses.
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/UserId'
+        - $ref: '#/parameters/Format-multi-groups'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/Sort'
         - $ref: '#/parameters/Direction'
@@ -152,20 +141,8 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/Format-multi-items'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -190,12 +167,7 @@ paths:
       parameters:
       - $ref: '#/parameters/UsersOrGroups'
       - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - $ref: '#/parameters/Key'
       - name: format
         in: query
         required: true
@@ -259,20 +231,8 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/Format-multi-items'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -298,20 +258,8 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/Format-multi-items'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -335,55 +283,15 @@ paths:
         - Items
       operationId: GETgetSpecificItem
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - $ref: '#/parameters/ItemKey'
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        - atom
-        - bib
-        - bibtex
-        - bookmarks
-        - coins
-        - csljson
-        - mods
-        - refer
-        - rdf_bibliontology
-        - rdf_dc
-        - rdf_zotero
-        - ris
-        - tei
-        - wikipedia
-        type: string
-        description: Answer format.
-      - name: include
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: Formats to include in the response (for format=json).
-      - name: content
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: Formats to include in the response (for format=atom).
-      - name: style
-        in: query
-        required: false
-        x-is-map: false
-        type: string
-        description: Citation style to use for formatted references. Can be either the file name (without the .csl extension) of one of the styles in the Zotero Style Repository (e.g., apa) or the URL of a remote CSL file. 
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/ItemKey'
+        - $ref: '#/parameters/Format-single-items'
+        - $ref: '#/parameters/Include'
+        - $ref: '#/parameters/Content'
+        - $ref: '#/parameters/Style'
+         
       responses:
         200:
           description: OK
@@ -397,22 +305,11 @@ paths:
         - Items
       operationId: DELETEdeleteItem
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - $ref: '#/parameters/ItemKey'
-      - name: If-Unmodified-Since-Version
-        in: header
-        required: true
-        x-is-map: false
-        type: integer
-        format: int64
-        description: Item's current version number
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/ItemKey'
+        - $ref: '#/parameters/If-Unmodified-Since-Version'
       responses:
         200:
           description: OK
@@ -426,21 +323,16 @@ paths:
         - Items
       operationId: PATCHupdateItem
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - $ref: '#/parameters/ItemKey'
-      - name: body
-        in: body
-        required: true
-        x-is-map: false
-        description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
-        schema: {}
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/ItemKey'
+        - name: body
+          in: body
+          required: true
+          x-is-map: false
+          description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
+          schema: {}
       responses:
         200:
           description: OK
@@ -459,21 +351,9 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - $ref: '#/parameters/Key'
         - $ref: '#/parameters/ItemKey'
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Format-multi-items'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -499,21 +379,9 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+        - $ref: '#/parameters/Key'
         - $ref: '#/parameters/ItemKey'
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Format-multi-tags'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -539,20 +407,8 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/Format-multi-tags'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -578,26 +434,9 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: tagName
-          in: path
-          required: true
-          x-is-map: false
-          type: string
-          description: Url encoded tag name
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/TagName'
+        - $ref: '#/parameters/Format-single-tags'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -623,21 +462,8 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          default: 3k89ouyqI6vYIkTsgPJTK4ek
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/Format-multi-collections'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -662,12 +488,7 @@ paths:
       parameters:
       - $ref: '#/parameters/UsersOrGroups'
       - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+      - $ref: '#/parameters/Key'
       - name: body
         in: body
         required: true
@@ -697,20 +518,8 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/Format-multi-collections'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -736,26 +545,9 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: collectionKey
-          in: path
-          required: true
-          x-is-map: false
-          type: string
-          description: A specific collection in the library
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/CollectionKey'
+        - $ref: '#/parameters/Format-single-collections'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -778,33 +570,23 @@ paths:
         - Collections
       operationId: PUTupdateCollection
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: collectionKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific collection in the library
-      - name: body
-        in: body
-        required: true
-        x-is-map: false
-#        default: >-
-#          {
-#            "key" : "DM2F65CA",
-#            "version" : 156,
-#            "name" : "My Collection",
-#            "parentCollection" : false
-#          }
-        description: First, <a href="#!/zotero/getSpecificCollection" target="_blank">retrieve the current version of the collection</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
-        schema: {}
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/CollectionKey'
+        - name: body
+          in: body
+          required: true
+          x-is-map: false
+  #        default: >-
+  #          {
+  #            "key" : "DM2F65CA",
+  #            "version" : 156,
+  #            "name" : "My Collection",
+  #            "parentCollection" : false
+  #          }
+          description: First, <a href="#!/zotero/getSpecificCollection" target="_blank">retrieve the current version of the collection</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
+          schema: {}
       responses:
         200:
           description: OK
@@ -818,27 +600,11 @@ paths:
         - Collections
       operationId: DELETEdeleteCollection
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: collectionKey
-        in: path
-        required: true
-        x-is-map: false
-        type: string
-        description: A specific collection in the library
-      - name: If-Unmodified-Since-Version
-        in: header
-        required: true
-        x-is-map: false
-        type: integer
-        format: int64
-        description: Collection's current version number
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/CollectionKey'
+        - $ref: '#/parameters/If-Unmodified-Since-Version'
       responses:
         200:
           description: ok
@@ -855,26 +621,9 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: collectionKey
-          in: path
-          required: true
-          x-is-map: false
-          type: string
-          description: A specific collection in the library
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/CollectionKey'
+        - $ref: '#/parameters/Format-multi-collections'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -900,26 +649,9 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: collectionKey
-          in: path
-          required: true
-          x-is-map: false
-          type: string
-          description: A specific collection in the library
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/CollectionKey'
+        - $ref: '#/parameters/Format-multi-items'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -945,26 +677,9 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: collectionKey
-          in: path
-          required: true
-          x-is-map: false
-          type: string
-          description: A specific collection in the library
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/CollectionKey'
+        - $ref: '#/parameters/Format-multi-items'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -990,26 +705,9 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: collectionKey
-          in: path
-          required: true
-          x-is-map: false
-          type: string
-          description: A specific collection in the library
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/CollectionKey'
+        - $ref: '#/parameters/Format-multi-tags'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -1035,20 +733,8 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/Format-multi-searches'
         - $ref: '#/parameters/ItemType-Search'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/QMode'
@@ -1071,38 +757,33 @@ paths:
         - Searches
       operationId: POSTcreateSearch
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - name: key
-        in: query
-        required: true
-        x-is-map: false
-        type: string
-        description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-      - name: body
-        in: body
-        required: true
-        x-is-map: false
-#        default: >-
-#          [
-#            {
-#              "name": "My Search",
-#              "conditions": [
-#                {
-#                  "condition": "title",
-#                  "operator": "contains",
-#                  "value": "foo"
-#                },
-#                {
-#                  "condition": "date",
-#                  "operator": "isInTheLast",
-#                  "value": "7 days"
-#                }
-#              ]
-#            }
-#          ]
-        description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
-        schema: {}
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - $ref: '#/parameters/Key'
+        - name: body
+          in: body
+          required: true
+          x-is-map: false
+  #        default: >-
+  #          [
+  #            {
+  #              "name": "My Search",
+  #              "conditions": [
+  #                {
+  #                  "condition": "title",
+  #                  "operator": "contains",
+  #                  "value": "foo"
+  #                },
+  #                {
+  #                  "condition": "date",
+  #                  "operator": "isInTheLast",
+  #                  "value": "7 days"
+  #                }
+  #              ]
+  #            }
+  #          ]
+          description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
+          schema: {}
       responses:
         200:
           description: OK
@@ -1119,26 +800,9 @@ paths:
       parameters:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
-        - name: key
-          in: query
-          required: true
-          x-is-map: false
-          type: string
-          description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
-        - name: searchKey
-          in: path
-          required: true
-          x-is-map: false
-          type: string
-          description: A specific saved search in the library.
-        - name: format
-          in: query
-          required: true
-          x-is-map: false
-          enum:
-          - json
-          type: string
-          description: Answer format.
+        - $ref: '#/parameters/Key'
+        - $ref: '#/parameters/SearchKey'
+        - $ref: '#/parameters/Format-single-searches'
         - $ref: '#/parameters/Sort'
         - $ref: '#/parameters/Direction'
         - $ref: '#/parameters/Limit'
@@ -1150,7 +814,9 @@ paths:
           description: Not Modified
         400:
           description: Bad Request
-# define reusable parameters:
+##################################
+#   define reusable PARAMETERS   #
+##################################
 parameters:
   UsersOrGroups:
     name: users_or_groups
@@ -1185,6 +851,52 @@ parameters:
     default: webpage
     type: string
     description: Get all the item types by making <a href="#!/zotero/getItemTypes" target="_blank">an item type request</a>
+  UserId:
+    name: userId
+    in: path
+    required: true
+    x-is-map: false
+    default: '2214605'
+    type: string
+    description: User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses.
+  TagName:
+    name: tagName
+    in: path
+    required: true
+    x-is-map: false
+    type: string
+    description: Url encoded tag name
+  CollectionKey:
+    name: collectionKey
+    in: path
+    required: true
+    x-is-map: false
+    type: string
+    description: A specific collection in the library
+  SearchKey:
+    name: searchKey
+    in: path
+    required: true
+    x-is-map: false
+    type: string
+    description: A specific saved search in the library.
+  If-Unmodified-Since-Version:
+    name: If-Unmodified-Since-Version
+    in: header
+    required: true
+    x-is-map: false
+    type: integer
+    format: int64
+    description: Item's current version number
+  # API key
+  Key:
+    name: key
+    in: query
+    required: true
+    x-is-map: false
+    type: string
+    description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+  # search parameters
   ItemType-Search:
     name: itemType
     in: query
@@ -1226,6 +938,7 @@ parameters:
     x-is-map: false
     type: string
     description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
+  # Sort parameters
   Sort:
     name: sort
     in: query
@@ -1279,3 +992,120 @@ parameters:
     type: integer
     format: int64
     description: The index of the first result. Combine with the limit parameter to select a slice of the available results
+  # format
+  Format-multi-groups:
+    name: format
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+      - json
+    type: string
+    description: Answer format.
+  Format-multi-items:
+    name: format
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+      - json
+    type: string
+    description: Answer format.
+  Format-single-items:
+    name: format
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+      - json
+      - atom
+      - bib
+      - bibtex
+      - bookmarks
+      - coins
+      - csljson
+      - mods
+      - refer
+      - rdf_bibliontology
+      - rdf_dc
+      - rdf_zotero
+      - ris
+      - tei
+      - wikipedia
+    type: string
+    description: Answer format.
+  Format-multi-tags:
+    name: format
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+      - json
+    type: string
+    description: Answer format.
+  Format-single-tags:
+    name: format
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+      - json
+    type: string
+    description: Answer format.
+  Format-multi-collections:
+    name: format
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+      - json
+    type: string
+    description: Answer format.
+  Format-single-collections:
+    name: format
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+     - json
+    type: string
+    description: Answer format.
+  Format-multi-searches:
+    name: format
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+      - json
+    type: string
+    description: Answer format.
+  Format-single-searches:
+    name: format
+    in: query
+    required: true
+    x-is-map: false
+    enum:
+     - json
+    type: string
+    description: Answer format.
+  Include:
+    name: include
+    in: query
+    required: false
+    x-is-map: false
+    type: string
+    description: Formats to include in the response (for format=json).
+  Content:
+    name: content
+    in: query
+    required: false
+    x-is-map: false
+    type: string
+    description: Formats to include in the response (for format=atom).
+  Style:
+    name: style
+    in: query
+    required: false
+    x-is-map: false
+    type: string
+    description: Citation style to use for formatted references. Can be either the file name (without the .csl extension) of one of the styles in the Zotero Style Repository (e.g., apa) or the URL of a remote CSL file.
