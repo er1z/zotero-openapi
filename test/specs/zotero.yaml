@@ -24,7 +24,7 @@ tags:
   - name: Collections
   - name: Tags
   - name: Searches
-  - name: Groups
+  - name: Privileges
   - name: Schema
     description: Item Type and Fields
 ####################
@@ -83,7 +83,7 @@ paths:
         400:
           description: Bad Request
       parameters:
-      - $ref: '#/parameters/ItemType'
+        - $ref: '#/parameters/ItemType'
   /creatorFields:
     get:
       description: Getting Localized Creator Fields
@@ -113,18 +113,34 @@ paths:
           description: Bad Request
   /users/{userId}/groups:
     get:
-      description: The set of groups the current API key has access to
+      description: The set of groups the current API key has access to, including public groups the key owner belongs to even if the key doesn't have explicit permissions for them.
       tags:
-        - Groups
+        - Privileges
       operationId: GETgetGroupsFromUserId
       parameters:
         - $ref: '#/parameters/UserId'
         - $ref: '#/parameters/Format-multi-groups'
+        - $ref: '#/parameters/Key-Optional'
         - $ref: '#/parameters/Q'
         - $ref: '#/parameters/Sort'
         - $ref: '#/parameters/Direction'
         - $ref: '#/parameters/Limit'
         - $ref: '#/parameters/Start'
+      responses:
+        200:
+          description: OK
+        304:
+          description: Not Modified
+        400:
+          description: Bad Request
+  /keys/{key}:
+    get:
+      description: The user id and privileges of the given API key.
+      tags:
+        - Privileges
+      operationId: GETgetPrivilegesOfKey
+      parameters:
+        - $ref: '#/parameters/Key-Path'
       responses:
         200:
           description: OK
@@ -165,50 +181,18 @@ paths:
         - Items
       operationId: POSTcreateItem
       parameters:
-      - $ref: '#/parameters/UsersOrGroups'
-      - $ref: '#/parameters/ElementId'
-      - $ref: '#/parameters/Key'
-      - name: format
-        in: query
-        required: true
-        x-is-map: false
-        enum:
-        - json
-        type: string
-        description: Answer format.
-      - name: body
-        in: body
-        required: true
-        x-is-map: false
-#        default: 
-#          [
-#            {
-#              "itemType": "webpage",
-#              "title": "",
-#              "creators": [
-#                {
-#                  "creatorType": "author",
-#                  "firstName": "",
-#                  "lastName": ""
-#                }
-#              ],
-#              "abstractNote": "",
-#              "websiteTitle": "",
-#              "websiteType": "",
-#              "date": "",
-#              "shortTitle": "",
-#              "url": "",
-#              "accessDate": "",
-#              "language": "",
-#              "rights": "",
-#              "extra": "",
-#              "tags": [],
-#              "collections": [],
-#              "relations": []
-#            }
-#          ]
-        description: Get the new item description by calling <a href="#!/zotero/getItemTemplate" target="_blank">an item template request</a>. Then modify it and resubmit it to the server in an array.
-        schema: {}
+        - $ref: '#/parameters/UsersOrGroups'
+        - $ref: '#/parameters/ElementId'
+        - $ref: '#/parameters/Key'
+        - name: format
+          in: query
+          required: true
+          x-is-map: false
+          enum:
+          - json
+          type: string
+          description: Answer format.
+        - $ref: '#/parameters/Body-Item'
       responses:
         200:
           description: OK
@@ -327,12 +311,7 @@ paths:
         - $ref: '#/parameters/ElementId'
         - $ref: '#/parameters/Key'
         - $ref: '#/parameters/ItemKey'
-        - name: body
-          in: body
-          required: true
-          x-is-map: false
-          description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
-          schema: {}
+        - $ref: '#/parameters/Body-Update'
       responses:
         200:
           description: OK
@@ -489,19 +468,7 @@ paths:
       - $ref: '#/parameters/UsersOrGroups'
       - $ref: '#/parameters/ElementId'
       - $ref: '#/parameters/Key'
-      - name: body
-        in: body
-        required: true
-        x-is-map: false
-#        default: >-
-#          [
-#            {
-#              "name" : "My Collection",
-#              "parentCollection" : false
-#            }
-#          ]
-        description: The Collection information
-        schema: {}
+      - $ref: '#/parameters/Body-Collection'
       responses:
         200:
           description: ok
@@ -574,19 +541,7 @@ paths:
         - $ref: '#/parameters/ElementId'
         - $ref: '#/parameters/Key'
         - $ref: '#/parameters/CollectionKey'
-        - name: body
-          in: body
-          required: true
-          x-is-map: false
-  #        default: >-
-  #          {
-  #            "key" : "DM2F65CA",
-  #            "version" : 156,
-  #            "name" : "My Collection",
-  #            "parentCollection" : false
-  #          }
-          description: First, <a href="#!/zotero/getSpecificCollection" target="_blank">retrieve the current version of the collection</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
-          schema: {}
+        - $ref: '#/parameters/Body-Update-Collection'
       responses:
         200:
           description: OK
@@ -760,30 +715,7 @@ paths:
         - $ref: '#/parameters/UsersOrGroups'
         - $ref: '#/parameters/ElementId'
         - $ref: '#/parameters/Key'
-        - name: body
-          in: body
-          required: true
-          x-is-map: false
-  #        default: >-
-  #          [
-  #            {
-  #              "name": "My Search",
-  #              "conditions": [
-  #                {
-  #                  "condition": "title",
-  #                  "operator": "contains",
-  #                  "value": "foo"
-  #                },
-  #                {
-  #                  "condition": "date",
-  #                  "operator": "isInTheLast",
-  #                  "value": "7 days"
-  #                }
-  #              ]
-  #            }
-  #          ]
-          description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
-          schema: {}
+        - $ref: '#/parameters/Body-Search'
       responses:
         200:
           description: OK
@@ -822,7 +754,6 @@ parameters:
     name: users_or_groups
     in: path
     required: true
-    x-is-map: false
     enum:
       - groups
       - users
@@ -832,59 +763,51 @@ parameters:
     name: elementId
     in: path
     required: true
-    x-is-map: false
     default: ''
     type: string
-    description: '<ul><li>If "groups": the group Id (ex: 303941 for cowaboo group id)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2214605 for stadja user id)</li></ul>'
+    description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If "users": the User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
   ItemKey:
     name: itemKey
     in: path
     required: true
-    x-is-map: false
     type: string
     description: A specific Item in the library.
   ItemType:
     name: itemType
     in: query
     required: true
-    x-is-map: false
-    default: webpage
+    default: journalArticle
     type: string
     description: Get all the item types by making <a href="#!/zotero/getItemTypes" target="_blank">an item type request</a>
   UserId:
     name: userId
     in: path
     required: true
-    x-is-map: false
-    default: '2214605'
+    default: '2897918'
     type: string
     description: User IDs are different from usernames and can be found on the <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a> and in OAuth responses.
   TagName:
     name: tagName
     in: path
     required: true
-    x-is-map: false
     type: string
     description: Url encoded tag name
   CollectionKey:
     name: collectionKey
     in: path
     required: true
-    x-is-map: false
     type: string
     description: A specific collection in the library
   SearchKey:
     name: searchKey
     in: path
     required: true
-    x-is-map: false
     type: string
     description: A specific saved search in the library.
   If-Unmodified-Since-Version:
     name: If-Unmodified-Since-Version
     in: header
     required: true
-    x-is-map: false
     type: integer
     format: int64
     description: Item's current version number
@@ -893,29 +816,40 @@ parameters:
     name: key
     in: query
     required: true
-    x-is-map: false
+    default: '7f1iVhE5D2GHVkRYwpSszGUA'
     type: string
-    description: The zotero Api key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the Cowaboo user it is 3k89ouyqI6vYIkTsgPJTK4ek
+    description: The zotero API key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+  Key-Path:
+    name: key
+    in: path
+    required: true
+    default: '7f1iVhE5D2GHVkRYwpSszGUA'
+    type: string
+    description: The zotero API key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+  Key-Optional:
+    name: key
+    in: query
+    required: false
+    default: '7f1iVhE5D2GHVkRYwpSszGUA'
+    type: string
+    description: The zotero API key. It is a key to which bearer you'll grant permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys" target="blank">This key can be created or found in your settings</a> (it is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
   # search parameters
   ItemType-Search:
     name: itemType
     in: query
     required: false
-    x-is-map: false
     type: string
     description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
   Q:
     name: q
     in: query
     required: false
-    x-is-map: false
     type: string
     description: 'Search parameter: Quick search. Searches titles and individual creator fields by default. Use the qmode parameter to change the mode. Currently supports phrase searching only.'
   QMode:
     name: qmode
     in: query
     required: false
-    x-is-map: false
     enum:
       - everything
       - titleCreatorYear
@@ -926,7 +860,6 @@ parameters:
     name: since
     in: query
     required: false
-    x-is-map: false
     default: 0
     type: integer
     format: int64
@@ -935,7 +868,6 @@ parameters:
     name: tag
     in: query
     required: false
-    x-is-map: false
     type: string
     description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax" target="_blank">the boolean search</a>'
   # Sort parameters
@@ -943,7 +875,6 @@ parameters:
     name: sort
     in: query
     required: true
-    x-is-map: false
     enum:
       - accessDate
       - addedBy
@@ -968,7 +899,6 @@ parameters:
     name: direction
     in: query
     required: false
-    x-is-map: false
     enum:
       - asc
       - desc
@@ -978,7 +908,6 @@ parameters:
     name: limit
     in: query
     required: false
-    x-is-map: false
     default: 50
     type: integer
     format: int64
@@ -987,7 +916,6 @@ parameters:
     name: start
     in: query
     required: false
-    x-is-map: false
     default: 0
     type: integer
     format: int64
@@ -997,7 +925,6 @@ parameters:
     name: format
     in: query
     required: true
-    x-is-map: false
     enum:
       - json
     type: string
@@ -1006,7 +933,6 @@ parameters:
     name: format
     in: query
     required: true
-    x-is-map: false
     enum:
       - json
     type: string
@@ -1015,7 +941,6 @@ parameters:
     name: format
     in: query
     required: true
-    x-is-map: false
     enum:
       - json
       - atom
@@ -1038,7 +963,6 @@ parameters:
     name: format
     in: query
     required: true
-    x-is-map: false
     enum:
       - json
     type: string
@@ -1047,7 +971,6 @@ parameters:
     name: format
     in: query
     required: true
-    x-is-map: false
     enum:
       - json
     type: string
@@ -1056,7 +979,6 @@ parameters:
     name: format
     in: query
     required: true
-    x-is-map: false
     enum:
       - json
     type: string
@@ -1065,7 +987,6 @@ parameters:
     name: format
     in: query
     required: true
-    x-is-map: false
     enum:
      - json
     type: string
@@ -1074,7 +995,6 @@ parameters:
     name: format
     in: query
     required: true
-    x-is-map: false
     enum:
       - json
     type: string
@@ -1083,7 +1003,6 @@ parameters:
     name: format
     in: query
     required: true
-    x-is-map: false
     enum:
      - json
     type: string
@@ -1099,13 +1018,124 @@ parameters:
     name: content
     in: query
     required: false
-    x-is-map: false
     type: string
     description: Formats to include in the response (for format=atom).
   Style:
     name: style
     in: query
     required: false
-    x-is-map: false
     type: string
     description: Citation style to use for formatted references. Can be either the file name (without the .csl extension) of one of the styles in the Zotero Style Repository (e.g., apa) or the URL of a remote CSL file.
+  Body-Item:
+    name: body
+    in: body
+    required: true
+    #type: object
+#        default: |
+#          [
+#            {
+#              "itemType": "webpage",
+#              "title": "",
+#              "creators": [
+#                {
+#                  "creatorType": "author",
+#                  "firstName": "",
+#                  "lastName": ""
+#                }
+#              ],
+#              "abstractNote": "",
+#              "websiteTitle": "",
+#              "websiteType": "",
+#              "date": "",
+#              "shortTitle": "",
+#              "url": "",
+#              "accessDate": "",
+#              "language": "",
+#              "rights": "",
+#              "extra": "",
+#              "tags": [],
+#              "collections": [],
+#              "relations": []
+#            }
+#          ]
+    description: Get the new item description by calling <a href="#!/zotero/getItemTemplate" target="_blank">an item template request</a>. Then modify it and resubmit it to the server in an array.
+    schema: {}
+  Body-Update:
+    name: body
+    in: body
+    required: true
+    description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
+    schema: {}
+  Body-Collection:
+    name: body
+    in: body
+    required: true
+    description: The Collection information
+    schema:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          parentCollection:
+            type: boolean
+        required:
+          - name
+        example:
+          name: Example
+  Body-Update-Collection:
+    name: body
+    in: body
+    required: true
+#        default: >-
+#          {
+#            "key" : "DM2F65CA",
+#            "version" : 156,
+#            "name" : "My Collection",
+#            "parentCollection" : false
+#          }
+    description: First, <a href="#!/zotero/getSpecificCollection" target="_blank">retrieve the current version of the collection</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
+    schema: {}
+  Body-Search:
+    name: body
+    in: body
+    required: true
+    schema:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          conditions:
+            type: array
+            items:
+              type: object
+              properties:
+                condition:
+                  type: string
+                operator:
+                  type: string
+                value:
+                  type: string
+#        default: >-
+#          [
+#            {
+#              "name": "My Search",
+#              "conditions": [
+#                {
+#                  "condition": "title",
+#                  "operator": "contains",
+#                  "value": "foo"
+#                },
+#                {
+#                  "condition": "date",
+#                  "operator": "isInTheLast",
+#                  "value": "7 days"
+#                }
+#              ]
+#            }
+#          ]
+    description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
+    schema: {}
