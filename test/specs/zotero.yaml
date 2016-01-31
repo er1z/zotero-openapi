@@ -311,6 +311,7 @@ paths:
         - $ref: '#/parameters/ElementId'
         - $ref: '#/parameters/Key'
         - $ref: '#/parameters/ItemKey'
+        - $ref: '#/parameters/If-Unmodified-Since-Version'
         - $ref: '#/parameters/Body-Update'
       responses:
         200:
