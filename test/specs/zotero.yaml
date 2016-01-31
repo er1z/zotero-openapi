@@ -1032,36 +1032,7 @@ parameters:
     required: false
     description: Get the new item description by calling <a href="#!/zotero/getItemTemplate" target="_blank">an item template request</a>. Then modify it and resubmit it to the server in an array.
     schema:
-      type: array
-      items:
-        type: object
-      example: |
-        [
-          {
-            "itemType": "webpage",
-            "title": "",
-            "creators": [
-              {
-                "creatorType": "author",
-                "firstName": "",
-                "lastName": ""
-              }
-            ],
-            "abstractNote": "",
-            "websiteTitle": "",
-            "websiteType": "",
-            "date": "",
-            "shortTitle": "",
-            "url": "",
-            "accessDate": "",
-            "language": "",
-            "rights": "",
-            "extra": "",
-            "tags": [],
-            "collections": [],
-            "relations": []
-          }
-        ]
+      $ref: '#/definitions/Items'
   Body-Update:
     name: body
     in: body
@@ -1074,81 +1045,118 @@ parameters:
     required: false
     description: The Collection information
     schema:
-      type: array
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-            default: Example
-          parentCollection:
-            type: boolean
-            default: false
-        required:
-          - name
-      example: |
-        [
-          {
-            "name" : "Example",
-            "parentCollection" : false
-          }
-        ]
+      $ref: '#/definitions/Collection-Array'
   Body-Update-Collection:
     name: body
     in: body
     required: false
     description: First, <a href="#!/zotero/getSpecificCollection" target="_blank">retrieve the current version of the collection</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
     schema:
-      type: object
-      example: |
-        {
-          "key" : "DM2F65CA",
-          "version" : 156,
-          "name" : "My Collection",
-          "parentCollection" : false
-        }
+      $ref: '#/definitions/Collection'
   Body-Search:
     name: body
     in: body
     required: false
     description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve the current version of the item</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
     schema:
-      type: array
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-            default: My Search
-          conditions:
-            type: array
-            items:
-              type: object
-              properties:
-                condition:
-                  type: string
-                  default: title
-                operator:
-                  type: string
-                  default: contains
-                value:
-                  type: string
-                  default: foo
-      example: |
-        [
-          {
-            "name": "My Search",
-            "conditions": [
-              {
-                "condition": "title",
-                "operator": "contains",
-                "value": "foo"
-              },
-              {
-                "condition": "date",
-                "operator": "isInTheLast",
-                "value": "7 days"
-              }
-            ]
-          }
-        ]
+      $ref: '#/definitions/Search'
+definitions:
+  Items:
+    type: array
+    items:
+      type: object
+    example: |
+      [
+        {
+          "itemType": "webpage",
+          "title": "",
+          "creators": [
+            {
+              "creatorType": "author",
+              "firstName": "",
+              "lastName": ""
+            }
+          ],
+          "abstractNote": "",
+          "websiteTitle": "",
+          "websiteType": "",
+          "date": "",
+          "shortTitle": "",
+          "url": "",
+          "accessDate": "",
+          "language": "",
+          "rights": "",
+          "extra": "",
+          "tags": [],
+          "collections": [],
+          "relations": []
+        }
+      ]
+  Collection:
+    type: object
+    properties:
+      name:
+        type: string
+      parentCollection:
+        type: boolean
+    example: |
+      {
+        "name" : "Example",
+        "parentCollection" : false
+      }
+  Collection-Array:
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+        parentCollection:
+          type: boolean
+    example: |
+      [
+        {
+          "name" : "Example",
+          "parentCollection" : false
+        }
+      ]
+  Search:
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+          default: My Search
+        conditions:
+          type: array
+          items:
+            type: object
+            properties:
+              condition:
+                type: string
+                default: title
+              operator:
+                type: string
+                default: contains
+              value:
+                type: string
+                default: foo
+    example: |
+      [
+        {
+          "name": "My Search",
+          "conditions": [
+            {
+              "condition": "title",
+              "operator": "contains",
+              "value": "foo"
+            },
+            {
+              "condition": "date",
+              "operator": "isInTheLast",
+              "value": "7 days"
+            }
+          ]
+        }
+      ]
