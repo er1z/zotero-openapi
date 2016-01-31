@@ -1029,37 +1029,39 @@ parameters:
   Body-Item:
     name: body
     in: body
-    required: true
-    #type: object
-#        default: |
-#          [
-#            {
-#              "itemType": "webpage",
-#              "title": "",
-#              "creators": [
-#                {
-#                  "creatorType": "author",
-#                  "firstName": "",
-#                  "lastName": ""
-#                }
-#              ],
-#              "abstractNote": "",
-#              "websiteTitle": "",
-#              "websiteType": "",
-#              "date": "",
-#              "shortTitle": "",
-#              "url": "",
-#              "accessDate": "",
-#              "language": "",
-#              "rights": "",
-#              "extra": "",
-#              "tags": [],
-#              "collections": [],
-#              "relations": []
-#            }
-#          ]
+    required: false
     description: Get the new item description by calling <a href="#!/zotero/getItemTemplate" target="_blank">an item template request</a>. Then modify it and resubmit it to the server in an array.
-    schema: {}
+    schema:
+      type: array
+      items:
+        type: object
+      example: |
+        [
+          {
+            "itemType": "webpage",
+            "title": "",
+            "creators": [
+              {
+                "creatorType": "author",
+                "firstName": "",
+                "lastName": ""
+              }
+            ],
+            "abstractNote": "",
+            "websiteTitle": "",
+            "websiteType": "",
+            "date": "",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "language": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [],
+            "relations": []
+          }
+        ]
   Body-Update:
     name: body
     in: body
@@ -1084,19 +1086,27 @@ parameters:
             default: false
         required:
           - name
+      example: |
+        [
+          {
+            "name" : "Example",
+            "parentCollection" : false
+          }
+        ]
   Body-Update-Collection:
     name: body
     in: body
     required: false
-#        default: >-
-#          {
-#            "key" : "DM2F65CA",
-#            "version" : 156,
-#            "name" : "My Collection",
-#            "parentCollection" : false
-#          }
     description: First, <a href="#!/zotero/getSpecificCollection" target="_blank">retrieve the current version of the collection</a><br/>The editable data will be found in the data property in the response.<br/>Copy all the data object, edit the values and send it to the server.
-    schema: {}
+    schema:
+      type: object
+      example: |
+        {
+          "key" : "DM2F65CA",
+          "version" : 156,
+          "name" : "My Collection",
+          "parentCollection" : false
+        }
   Body-Search:
     name: body
     in: body
@@ -1124,21 +1134,21 @@ parameters:
                 value:
                   type: string
                   default: foo
-#        default: >-
-#          [
-#            {
-#              "name": "My Search",
-#              "conditions": [
-#                {
-#                  "condition": "title",
-#                  "operator": "contains",
-#                  "value": "foo"
-#                },
-#                {
-#                  "condition": "date",
-#                  "operator": "isInTheLast",
-#                  "value": "7 days"
-#                }
-#              ]
-#            }
-#          ]
+      example: |
+        [
+          {
+            "name": "My Search",
+            "conditions": [
+              {
+                "condition": "title",
+                "operator": "contains",
+                "value": "foo"
+              },
+              {
+                "condition": "date",
+                "operator": "isInTheLast",
+                "value": "7 days"
+              }
+            ]
+          }
+        ]
