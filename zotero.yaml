@@ -1,0 +1,3485 @@
+openapi: 3.0.1
+info:
+  title: Zotero Web API
+  description: |
+    Zotero Web API https://www.zotero.org/support/dev/web_api/v3/basics
+
+    Test implementation in Swagger-UI by @zuphilip
+
+    Edit the configuration at https://github.com/zuphilip/swagger-ui/blob/gh-pages/test/specs/zotero.yaml
+
+    Adapted https://github.com/stadja/cowaboo see also http://stadja.net:81/cowaboo-swagger/#!/zotero/
+  version: 3.0.0
+servers:
+- url: https://api.zotero.org/
+tags:
+- name: Items
+- name: Collections
+- name: Tags
+- name: Searches
+- name: Privileges
+- name: Schema
+  description: Item Type and Fields
+paths:
+  /itemTypes:
+    get:
+      tags:
+      - Schema
+      description: Getting All Item Types
+      operationId: GETgetItemTypes
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /itemFields:
+    get:
+      tags:
+      - Schema
+      description: Getting All Item Fields
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /itemTypeFields:
+    get:
+      tags:
+      - Schema
+      description: Getting All Valid Fields for an Item Type
+      parameters:
+      - name: itemType
+        in: query
+        description: Get all the item types by making <a href="#!/zotero/getItemTypes"
+          target="_blank">an item type request</a>
+        required: true
+        schema:
+          type: string
+          default: journalArticle
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /itemTypeCreatorTypes:
+    get:
+      tags:
+      - Schema
+      description: Getting Valid Creator Types for an Item Type
+      parameters:
+      - name: itemType
+        in: query
+        description: Get all the item types by making <a href="#!/zotero/getItemTypes"
+          target="_blank">an item type request</a>
+        required: true
+        schema:
+          type: string
+          default: journalArticle
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /creatorFields:
+    get:
+      tags:
+      - Schema
+      description: Getting Localized Creator Fields
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /items/new:
+    get:
+      tags:
+      - Schema
+      description: Getting a Template for a New Item
+      operationId: GETgetItemTemplate
+      parameters:
+      - name: itemType
+        in: query
+        description: Get all the item types by making <a href="#!/zotero/getItemTypes"
+          target="_blank">an item type request</a>
+        required: true
+        schema:
+          type: string
+          default: journalArticle
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /users/{userId}/groups:
+    get:
+      tags:
+      - Privileges
+      description: The set of groups the current API key has access to, including
+        public groups the key owner belongs to even if the key doesn't have explicit
+        permissions for them.
+      operationId: GETgetGroupsFromUserId
+      parameters:
+      - name: userId
+        in: path
+        description: User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses.
+        required: true
+        schema:
+          type: string
+          default: "2897918"
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /keys/{key}:
+    get:
+      tags:
+      - Privileges
+      description: The user id and privileges of the given API key.
+      operationId: GETgetPrivilegesOfKey
+      parameters:
+      - name: key
+        in: path
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/items:
+    get:
+      tags:
+      - Items
+      description: The set of all items in the library.
+      operationId: GETgetItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+    post:
+      tags:
+      - Items
+      description: Create a new item.
+      operationId: POSTcreateItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+          x-is-map: false
+        x-is-map: false
+      requestBody:
+        description: Get the new item description by calling <a href="#!/zotero/getItemTemplate"
+          target="_blank">an item template request</a>. Then modify it and resubmit
+          it to the server in an array.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Items'
+        required: false
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+        409:
+          description: 'Conflict: The target library is locked.'
+          content: {}
+        412:
+          description: 'Precondition Failed: The provided Zotero-Write-Token has already
+            been submitted.'
+          content: {}
+        413:
+          description: 'Request Entity Too Large: Too many items submitted'
+          content: {}
+      x-codegen-request-body-name: body
+  /{users_or_groups}/{elementId}/items/top:
+    get:
+      tags:
+      - Items
+      description: The set of all top-level items in the library.
+      operationId: GETgetTopItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/items/trash:
+    get:
+      tags:
+      - Items
+      description: The set of items in the trash.
+      operationId: GETgetTrashItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/items/{itemKey}:
+    get:
+      tags:
+      - Items
+      description: The set of all items in the library.
+      operationId: GETgetSpecificItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: itemKey
+        in: path
+        description: A specific Item in the library.
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+          - atom
+          - bib
+          - bibtex
+          - bookmarks
+          - coins
+          - csljson
+          - mods
+          - refer
+          - rdf_bibliontology
+          - rdf_dc
+          - rdf_zotero
+          - ris
+          - tei
+          - wikipedia
+      - name: include
+        in: query
+        description: Formats to include in the response (for format=json).
+        schema:
+          type: string
+          x-is-map: false
+        x-is-map: false
+      - name: content
+        in: query
+        description: Formats to include in the response (for format=atom).
+        schema:
+          type: string
+      - name: style
+        in: query
+        description: Citation style to use for formatted references. Can be either
+          the file name (without the .csl extension) of one of the styles in the Zotero
+          Style Repository (e.g., apa) or the URL of a remote CSL file.
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+    delete:
+      tags:
+      - Items
+      description: Doesn't Work - Deleting an item.
+      operationId: DELETEdeleteItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: itemKey
+        in: path
+        description: A specific Item in the library.
+        required: true
+        schema:
+          type: string
+      - name: If-Unmodified-Since-Version
+        in: header
+        description: Item's current version number
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: OK
+          content: {}
+        409:
+          description: 'Conflict: The target library is locked.'
+          content: {}
+        412:
+          description: 'Precondition Failed: The item has changed since retrieval
+            (i.e., the provided item version no longer matches).'
+          content: {}
+    patch:
+      tags:
+      - Items
+      description: Updating an Existing Item.
+      operationId: PATCHupdateItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: itemKey
+        in: path
+        description: A specific Item in the library.
+        required: true
+        schema:
+          type: string
+      - name: If-Unmodified-Since-Version
+        in: header
+        description: Item's current version number
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve
+          the current version of the item</a><br/>The editable data will be found
+          in the data property in the response.<br/>Copy all the data object, edit
+          the values and send it to the server.
+        content:
+          application/json:
+            schema:
+              type: object
+        required: true
+      responses:
+        200:
+          description: OK
+          content: {}
+        400:
+          description: 'Bad Request: Invalid type/field; unparseable JSON'
+          content: {}
+        409:
+          description: 'Conflict: The target library is locked.'
+          content: {}
+        412:
+          description: 'Precondition Failed: The item has changed since retrieval
+            (i.e., the provided item version no longer matches).'
+          content: {}
+      x-codegen-request-body-name: body
+  /{users_or_groups}/{elementId}/items/{itemKey}/children:
+    get:
+      tags:
+      - Items
+      description: The set of all child items under a specific item.
+      operationId: GETgetChildItemsOfSpecificItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: itemKey
+        in: path
+        description: A specific Item in the library.
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/items/{itemKey}/tags:
+    get:
+      tags:
+      - Tags
+      description: The set of all tags associated with a specific item.
+      operationId: GETgetTagsOfSpecificItem
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: itemKey
+        in: path
+        description: A specific Item in the library.
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/tags:
+    get:
+      tags:
+      - Tags
+      description: The set of all tags in the library.
+      operationId: GETgetTags
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: ok
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/tags/{tagName}:
+    get:
+      tags:
+      - Tags
+      description: The set of tags (i.e., of all types) matching a specific name.
+      operationId: GETgetSPecificTag
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: tagName
+        in: path
+        description: Url encoded tag name
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/collections:
+    get:
+      tags:
+      - Collections
+      description: The set of collections in the library.
+      operationId: GETgetCollections
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+    post:
+      tags:
+      - Collections
+      description: Create a collection.
+      operationId: POSTcreateCollection
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      requestBody:
+        description: The Collection information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Collection-Array'
+        required: false
+      responses:
+        200:
+          description: ok
+          content: {}
+        409:
+          description: 'Conflict: The target library is locked'
+          content: {}
+        412:
+          description: 'Precondition Failed: The provided Zotero-Write-Token has already
+            been submitted.'
+          content: {}
+      x-codegen-request-body-name: body
+  /{users_or_groups}/{elementId}/collections/top:
+    get:
+      tags:
+      - Collections
+      description: The set of all top-level collections in the library.
+      operationId: GETgetTopCollections
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/collections/{collectionKey}:
+    get:
+      tags:
+      - Collections
+      description: A specific collection in the library.
+      operationId: GETgetSpecificCollection
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: collectionKey
+        in: path
+        description: A specific collection in the library
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+    put:
+      tags:
+      - Collections
+      description: Doesn't Work - Modify a specific collection in the library.
+      operationId: PUTupdateCollection
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: collectionKey
+        in: path
+        description: A specific collection in the library
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: First, <a href="#!/zotero/getSpecificCollection" target="_blank">retrieve
+          the current version of the collection</a><br/>The editable data will be
+          found in the data property in the response.<br/>Copy all the data object,
+          edit the values and send it to the server.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Collection'
+        required: false
+      responses:
+        200:
+          description: OK
+          content: {}
+        409:
+          description: 'Conflict: The target library is locked'
+          content: {}
+        412:
+          description: 'Precondition Failed: The provided Zotero-Write-Token has already
+            been submitted.'
+          content: {}
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+      - Collections
+      description: Doesn't Work - delete a specific collection in the library.
+      operationId: DELETEdeleteCollection
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: collectionKey
+        in: path
+        description: A specific collection in the library
+        required: true
+        schema:
+          type: string
+      - name: If-Unmodified-Since-Version
+        in: header
+        description: Item's current version number
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: ok
+          content: {}
+        409:
+          description: 'Conflict: The target library is locked'
+          content: {}
+        412:
+          description: 'Precondition Failed: The provided Zotero-Write-Token has already
+            been submitted.'
+          content: {}
+  /{users_or_groups}/{elementId}/collections/{collectionKey}/collections:
+    get:
+      tags:
+      - Collections
+      description: The set of subcollections within a specific collection in the library.
+      operationId: GETgetSpecificCollectionSubCollections
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: collectionKey
+        in: path
+        description: A specific collection in the library
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/collections/{collectionKey}/items:
+    get:
+      tags:
+      - Collections
+      description: The set of all items within a specific collection in the library.
+      operationId: GETgetSpecificCollectionItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: collectionKey
+        in: path
+        description: A specific collection in the library
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/collections/{collectionKey}/items/top:
+    get:
+      tags:
+      - Collections
+      description: The set of top-level items within a specific collection in the
+        library.
+      operationId: GETgetSpecificCollectionTopItems
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: collectionKey
+        in: path
+        description: A specific collection in the library
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/collections/{collectionKey}/tags:
+    get:
+      tags:
+      - Tags
+      description: The set of tags within a specific collection in the library.
+      operationId: GETgetSpecificCollectionTags
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: collectionKey
+        in: path
+        description: A specific collection in the library
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+  /{users_or_groups}/{elementId}/searches:
+    get:
+      tags:
+      - Searches
+      description: The set of all saved searches in the library.
+      operationId: GETgetSearches
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: itemType
+        in: query
+        description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: q
+        in: query
+        description: 'Search parameter: Quick search. Searches titles and individual
+          creator fields by default. Use the qmode parameter to change the mode. Currently
+          supports phrase searching only.'
+        schema:
+          type: string
+      - name: qmode
+        in: query
+        description: 'Search parameter: Quick search mode. To include full-text content
+          in the search, use everything. Searching of other fields will be possible
+          in the future.'
+        schema:
+          type: string
+          default: titleCreatorYear
+          enum:
+          - everything
+          - titleCreatorYear
+      - name: since
+        in: query
+        description: 'Search parameter: Return only objects modified after the specified
+          library verson.'
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      - name: tag
+        in: query
+        description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+          target="_blank">the boolean search</a>'
+        schema:
+          type: string
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+    post:
+      tags:
+      - Searches
+      description: Create a new search.
+      operationId: POSTcreateSearch
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      requestBody:
+        description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve
+          the current version of the item</a><br/>The editable data will be found
+          in the data property in the response.<br/>Copy all the data object, edit
+          the values and send it to the server.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Search'
+        required: false
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+      x-codegen-request-body-name: body
+  /{users_or_groups}/{elementId}/searches/{searchKey}:
+    get:
+      tags:
+      - Searches
+      description: A specific saved search in the library.
+      operationId: GETgetSpecificSearch
+      parameters:
+      - name: users_or_groups
+        in: path
+        description: Do you want to make a search on a group or a user?
+        required: true
+        schema:
+          type: string
+          enum:
+          - groups
+          - users
+      - name: elementId
+        in: path
+        description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+          "users": the User IDs are different from usernames and can be found on the
+          <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys
+          page</a> and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: query
+        description: The zotero API key. It is a key to which bearer you'll grant
+          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+          target="blank">This key can be created or found in your settings</a> (it
+          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+        required: true
+        schema:
+          type: string
+          default: 7f1iVhE5D2GHVkRYwpSszGUA
+      - name: searchKey
+        in: path
+        description: A specific saved search in the library.
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: Answer format.
+        required: true
+        schema:
+          type: string
+          enum:
+          - json
+      - name: sort
+        in: query
+        description: The name of the field by which entries are sorted.
+        required: true
+        schema:
+          type: string
+          default: dateModified
+          enum:
+          - accessDate
+          - addedBy
+          - callNumber
+          - creator
+          - date
+          - dateAdded
+          - dateModified
+          - journalAbbreviation
+          - language
+          - libraryCatalog
+          - numItems
+          - publicationTitle
+          - publisher
+          - rights
+          - title
+          - type
+      - name: direction
+        in: query
+        description: The sorting direction of the field specified in the sort parameter.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: limit
+        in: query
+        description: The maximum number of results to return with a single request
+        schema:
+          type: integer
+          format: int64
+          default: 50
+      - name: start
+        in: query
+        description: The index of the first result. Combine with the limit parameter
+          to select a slice of the available results
+        schema:
+          type: integer
+          format: int64
+          default: 0
+      responses:
+        200:
+          description: OK
+          content: {}
+        304:
+          description: Not Modified
+          content: {}
+        400:
+          description: Bad Request
+          content: {}
+components:
+  schemas:
+    Items:
+      type: array
+      example: |
+        [
+          {
+            "itemType": "webpage",
+            "title": "",
+            "creators": [
+              {
+                "creatorType": "author",
+                "firstName": "",
+                "lastName": ""
+              }
+            ],
+            "abstractNote": "",
+            "websiteTitle": "",
+            "websiteType": "",
+            "date": "",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "language": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [],
+            "relations": []
+          }
+        ]
+      items:
+        type: object
+        properties: {}
+    Collection:
+      type: object
+      properties:
+        name:
+          type: string
+        parentCollection:
+          type: boolean
+      example: |
+        {
+          "name" : "Example",
+          "parentCollection" : false
+        }
+    Collection-Array:
+      type: array
+      example: |
+        [
+          {
+            "name" : "Example",
+            "parentCollection" : false
+          }
+        ]
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          parentCollection:
+            type: boolean
+    Search:
+      type: array
+      example: |
+        [
+          {
+            "name": "My Search",
+            "conditions": [
+              {
+                "condition": "title",
+                "operator": "contains",
+                "value": "foo"
+              },
+              {
+                "condition": "date",
+                "operator": "isInTheLast",
+                "value": "7 days"
+              }
+            ]
+          }
+        ]
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            default: My Search
+          conditions:
+            type: array
+            items:
+              type: object
+              properties:
+                condition:
+                  type: string
+                  default: title
+                operator:
+                  type: string
+                  default: contains
+                value:
+                  type: string
+                  default: foo
+  parameters:
+    UsersOrGroups:
+      name: users_or_groups
+      in: path
+      description: Do you want to make a search on a group or a user?
+      required: true
+      schema:
+        type: string
+        enum:
+        - groups
+        - users
+    ElementId:
+      name: elementId
+      in: path
+      description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
+        "users": the User IDs are different from usernames and can be found on the
+        <a target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a>
+        and in OAuth responses. (ex: 2897918 for swaggerui user id)</li></ul>'
+      required: true
+      schema:
+        type: string
+    ItemKey:
+      name: itemKey
+      in: path
+      description: A specific Item in the library.
+      required: true
+      schema:
+        type: string
+    ItemType:
+      name: itemType
+      in: query
+      description: Get all the item types by making <a href="#!/zotero/getItemTypes"
+        target="_blank">an item type request</a>
+      required: true
+      schema:
+        type: string
+        default: journalArticle
+    UserId:
+      name: userId
+      in: path
+      description: User IDs are different from usernames and can be found on the <a
+        target="_blank" href="https://www.zotero.org/settings/keys">API Keys page</a>
+        and in OAuth responses.
+      required: true
+      schema:
+        type: string
+        default: "2897918"
+    TagName:
+      name: tagName
+      in: path
+      description: Url encoded tag name
+      required: true
+      schema:
+        type: string
+    CollectionKey:
+      name: collectionKey
+      in: path
+      description: A specific collection in the library
+      required: true
+      schema:
+        type: string
+    SearchKey:
+      name: searchKey
+      in: path
+      description: A specific saved search in the library.
+      required: true
+      schema:
+        type: string
+    If-Unmodified-Since-Version:
+      name: If-Unmodified-Since-Version
+      in: header
+      description: Item's current version number
+      required: true
+      schema:
+        type: integer
+        format: int64
+    Key:
+      name: key
+      in: query
+      description: The zotero API key. It is a key to which bearer you'll grant permission
+        to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+        target="blank">This key can be created or found in your settings</a> (it is
+        called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+      required: true
+      schema:
+        type: string
+        default: 7f1iVhE5D2GHVkRYwpSszGUA
+    Key-Path:
+      name: key
+      in: path
+      description: The zotero API key. It is a key to which bearer you'll grant permission
+        to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+        target="blank">This key can be created or found in your settings</a> (it is
+        called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+      required: true
+      schema:
+        type: string
+        default: 7f1iVhE5D2GHVkRYwpSszGUA
+    Key-Optional:
+      name: key
+      in: query
+      description: The zotero API key. It is a key to which bearer you'll grant permission
+        to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+        target="blank">This key can be created or found in your settings</a> (it is
+        called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+      schema:
+        type: string
+        default: 7f1iVhE5D2GHVkRYwpSszGUA
+    ItemType-Search:
+      name: itemType
+      in: query
+      description: 'Search parameter: Item type search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+        target="_blank">the boolean search</a>'
+      schema:
+        type: string
+    Q:
+      name: q
+      in: query
+      description: 'Search parameter: Quick search. Searches titles and individual
+        creator fields by default. Use the qmode parameter to change the mode. Currently
+        supports phrase searching only.'
+      schema:
+        type: string
+    QMode:
+      name: qmode
+      in: query
+      description: 'Search parameter: Quick search mode. To include full-text content
+        in the search, use everything. Searching of other fields will be possible
+        in the future.'
+      schema:
+        type: string
+        default: titleCreatorYear
+        enum:
+        - everything
+        - titleCreatorYear
+    Since:
+      name: since
+      in: query
+      description: 'Search parameter: Return only objects modified after the specified
+        library verson.'
+      schema:
+        type: integer
+        format: int64
+        default: 0
+    Tag-Search:
+      name: tag
+      in: query
+      description: 'Search parameter: Tag search. It supports <a href="https://www.zotero.org/support/dev/web_api/v3/basics#search_syntax"
+        target="_blank">the boolean search</a>'
+      schema:
+        type: string
+    Sort:
+      name: sort
+      in: query
+      description: The name of the field by which entries are sorted.
+      required: true
+      schema:
+        type: string
+        default: dateModified
+        enum:
+        - accessDate
+        - addedBy
+        - callNumber
+        - creator
+        - date
+        - dateAdded
+        - dateModified
+        - journalAbbreviation
+        - language
+        - libraryCatalog
+        - numItems
+        - publicationTitle
+        - publisher
+        - rights
+        - title
+        - type
+    Direction:
+      name: direction
+      in: query
+      description: The sorting direction of the field specified in the sort parameter.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    Limit:
+      name: limit
+      in: query
+      description: The maximum number of results to return with a single request
+      schema:
+        type: integer
+        format: int64
+        default: 50
+    Start:
+      name: start
+      in: query
+      description: The index of the first result. Combine with the limit parameter
+        to select a slice of the available results
+      schema:
+        type: integer
+        format: int64
+        default: 0
+    Format-multi-groups:
+      name: format
+      in: query
+      description: Answer format.
+      required: true
+      schema:
+        type: string
+        enum:
+        - json
+    Format-multi-items:
+      name: format
+      in: query
+      description: Answer format.
+      required: true
+      schema:
+        type: string
+        enum:
+        - json
+    Format-single-items:
+      name: format
+      in: query
+      description: Answer format.
+      required: true
+      schema:
+        type: string
+        enum:
+        - json
+        - atom
+        - bib
+        - bibtex
+        - bookmarks
+        - coins
+        - csljson
+        - mods
+        - refer
+        - rdf_bibliontology
+        - rdf_dc
+        - rdf_zotero
+        - ris
+        - tei
+        - wikipedia
+    Format-multi-tags:
+      name: format
+      in: query
+      description: Answer format.
+      required: true
+      schema:
+        type: string
+        enum:
+        - json
+    Format-single-tags:
+      name: format
+      in: query
+      description: Answer format.
+      required: true
+      schema:
+        type: string
+        enum:
+        - json
+    Format-multi-collections:
+      name: format
+      in: query
+      description: Answer format.
+      required: true
+      schema:
+        type: string
+        enum:
+        - json
+    Format-single-collections:
+      name: format
+      in: query
+      description: Answer format.
+      required: true
+      schema:
+        type: string
+        enum:
+        - json
+    Format-multi-searches:
+      name: format
+      in: query
+      description: Answer format.
+      required: true
+      schema:
+        type: string
+        enum:
+        - json
+    Format-single-searches:
+      name: format
+      in: query
+      description: Answer format.
+      required: true
+      schema:
+        type: string
+        enum:
+        - json
+    Include:
+      name: include
+      in: query
+      description: Formats to include in the response (for format=json).
+      schema:
+        type: string
+        x-is-map: false
+      x-is-map: false
+    Content:
+      name: content
+      in: query
+      description: Formats to include in the response (for format=atom).
+      schema:
+        type: string
+    Style:
+      name: style
+      in: query
+      description: Citation style to use for formatted references. Can be either the
+        file name (without the .csl extension) of one of the styles in the Zotero
+        Style Repository (e.g., apa) or the URL of a remote CSL file.
+      schema:
+        type: string
+  requestBodies:
+    Body-Item:
+      description: Get the new item description by calling <a href="#!/zotero/getItemTemplate"
+        target="_blank">an item template request</a>. Then modify it and resubmit
+        it to the server in an array.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Items'
+      required: false
+    Body-Update:
+      description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve
+        the current version of the item</a><br/>The editable data will be found in
+        the data property in the response.<br/>Copy all the data object, edit the
+        values and send it to the server.
+      content:
+        application/json:
+          schema:
+            type: object
+      required: true
+    Body-Collection:
+      description: The Collection information
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Collection-Array'
+      required: false
+    Body-Update-Collection:
+      description: First, <a href="#!/zotero/getSpecificCollection" target="_blank">retrieve
+        the current version of the collection</a><br/>The editable data will be found
+        in the data property in the response.<br/>Copy all the data object, edit the
+        values and send it to the server.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Collection'
+      required: false
+    Body-Search:
+      description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve
+        the current version of the item</a><br/>The editable data will be found in
+        the data property in the response.<br/>Copy all the data object, edit the
+        values and send it to the server.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Search'
+      required: false
