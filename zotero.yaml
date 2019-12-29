@@ -26,7 +26,9 @@ paths:
       tags:
       - Schema
       description: Getting All Item Types
-      operationId: GETgetItemTypes
+      operationId: getItemTypes
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -42,6 +44,8 @@ paths:
       tags:
       - Schema
       description: Getting All Item Fields
+      security:
+        - bearerAuth: []      
       responses:
         200:
           description: OK
@@ -66,6 +70,8 @@ paths:
         schema:
           type: string
           default: journalArticle
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -90,6 +96,8 @@ paths:
         schema:
           type: string
           default: journalArticle
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -105,6 +113,8 @@ paths:
       tags:
       - Schema
       description: Getting Localized Creator Fields
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -120,7 +130,7 @@ paths:
       tags:
       - Schema
       description: Getting a Template for a New Item
-      operationId: GETgetItemTemplate
+      operationId: getItemTemplate
       parameters:
       - name: itemType
         in: query
@@ -130,6 +140,8 @@ paths:
         schema:
           type: string
           default: journalArticle
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -147,7 +159,7 @@ paths:
       description: The set of groups the current API key has access to, including
         public groups the key owner belongs to even if the key doesn't have explicit
         permissions for them.
-      operationId: GETgetGroupsFromUserId
+      operationId: getGroupsFromUserId
       parameters:
       - name: userId
         in: path
@@ -229,6 +241,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -244,7 +258,7 @@ paths:
       tags:
       - Privileges
       description: The user id and privileges of the given API key.
-      operationId: GETgetPrivilegesOfKey
+      operationId: getPrivilegesOfKey
       parameters:
       - name: key
         in: path
@@ -256,6 +270,8 @@ paths:
         schema:
           type: string
           default: 7f1iVhE5D2GHVkRYwpSszGUA
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -271,7 +287,7 @@ paths:
       tags:
       - Items
       description: The set of all items in the library.
-      operationId: GETgetItems
+      operationId: getItems
       parameters:
       - name: users_or_groups
         in: path
@@ -280,8 +296,8 @@ paths:
         schema:
           type: string
           enum:
-          - groups
           - users
+          - groups
       - name: elementId
         in: path
         description: '<ul><li>If "groups": the group Id (ex: 471609 for the <a href="https://www.zotero.org/groups/swaggerui-open-group">swaggerui-open-group</a>)</li><li>If
@@ -291,16 +307,7 @@ paths:
         required: true
         schema:
           type: string
-      - name: key
-        in: query
-        description: The zotero API key. It is a key to which bearer you'll grant
-          permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
-          target="blank">This key can be created or found in your settings</a> (it
-          is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
-        required: true
-        schema:
-          type: string
-          default: 7f1iVhE5D2GHVkRYwpSszGUA
+          default: 2897918
       - name: format
         in: query
         description: Answer format.
@@ -394,21 +401,28 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
-          content: {}
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResult'
         304:
           description: Not Modified
           content: {}
         400:
           description: Bad Request
           content: {}
+        403:
+          $ref: '#/components/responses/Forbidden'
     post:
       tags:
       - Items
       description: Create a new item.
-      operationId: POSTcreateItem
+      operationId: createItem
       parameters:
       - name: users_or_groups
         in: path
@@ -457,6 +471,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Items'
         required: false
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -483,7 +499,7 @@ paths:
       tags:
       - Items
       description: The set of all top-level items in the library.
-      operationId: GETgetTopItems
+      operationId: getTopItems
       parameters:
       - name: users_or_groups
         in: path
@@ -606,6 +622,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -621,7 +639,7 @@ paths:
       tags:
       - Items
       description: The set of items in the trash.
-      operationId: GETgetTrashItems
+      operationId: getTrashItems
       parameters:
       - name: users_or_groups
         in: path
@@ -744,6 +762,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -759,7 +779,7 @@ paths:
       tags:
       - Items
       description: The set of all items in the library.
-      operationId: GETgetSpecificItem
+      operationId: getSpecificItem
       parameters:
       - name: users_or_groups
         in: path
@@ -836,6 +856,8 @@ paths:
           Style Repository (e.g., apa) or the URL of a remote CSL file.
         schema:
           type: string
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -850,7 +872,7 @@ paths:
       tags:
       - Items
       description: Doesn't Work - Deleting an item.
-      operationId: DELETEdeleteItem
+      operationId: deleteItem
       parameters:
       - name: users_or_groups
         in: path
@@ -891,8 +913,12 @@ paths:
         description: Item's current version number
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
+          # TODO: dart generator messes this up
+          # type: integer
+          # format: int64
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -949,8 +975,10 @@ paths:
         description: Item's current version number
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
+          # TODO: dart generator messes this up
+          # type: integer
+          # format: int64
       requestBody:
         description: First, <a href="#!/zotero/getSpecificItem" target="_blank">retrieve
           the current version of the item</a><br/>The editable data will be found
@@ -961,6 +989,8 @@ paths:
             schema:
               type: object
         required: true
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -981,7 +1011,7 @@ paths:
       tags:
       - Items
       description: The set of all child items under a specific item.
-      operationId: GETgetChildItemsOfSpecificItem
+      operationId: getChildItemsOfSpecificItem
       parameters:
       - name: users_or_groups
         in: path
@@ -1110,6 +1140,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -1125,7 +1157,7 @@ paths:
       tags:
       - Tags
       description: The set of all tags associated with a specific item.
-      operationId: GETgetTagsOfSpecificItem
+      operationId: getTagsOfSpecificItem
       parameters:
       - name: users_or_groups
         in: path
@@ -1254,6 +1286,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -1269,7 +1303,7 @@ paths:
       tags:
       - Tags
       description: The set of all tags in the library.
-      operationId: GETgetTags
+      operationId: getTags
       parameters:
       - name: users_or_groups
         in: path
@@ -1392,6 +1426,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: ok
@@ -1407,7 +1443,7 @@ paths:
       tags:
       - Tags
       description: The set of tags (i.e., of all types) matching a specific name.
-      operationId: GETgetSPecificTag
+      operationId: getSPecificTag
       parameters:
       - name: users_or_groups
         in: path
@@ -1536,6 +1572,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -1551,7 +1589,7 @@ paths:
       tags:
       - Collections
       description: The set of collections in the library.
-      operationId: GETgetCollections
+      operationId: getCollections
       parameters:
       - name: users_or_groups
         in: path
@@ -1674,6 +1712,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -1688,7 +1728,7 @@ paths:
       tags:
       - Collections
       description: Create a collection.
-      operationId: POSTcreateCollection
+      operationId: createCollection
       parameters:
       - name: users_or_groups
         in: path
@@ -1725,6 +1765,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Collection-Array'
         required: false
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: ok
@@ -1742,7 +1784,7 @@ paths:
       tags:
       - Collections
       description: The set of all top-level collections in the library.
-      operationId: GETgetTopCollections
+      operationId: getTopCollections
       parameters:
       - name: users_or_groups
         in: path
@@ -1865,6 +1907,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -1880,7 +1924,7 @@ paths:
       tags:
       - Collections
       description: A specific collection in the library.
-      operationId: GETgetSpecificCollection
+      operationId: getSpecificCollection
       parameters:
       - name: users_or_groups
         in: path
@@ -2009,6 +2053,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -2023,7 +2069,7 @@ paths:
       tags:
       - Collections
       description: Doesn't Work - Modify a specific collection in the library.
-      operationId: PUTupdateCollection
+      operationId: updateCollection
       parameters:
       - name: users_or_groups
         in: path
@@ -2069,6 +2115,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Collection'
         required: false
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -2085,7 +2133,7 @@ paths:
       tags:
       - Collections
       description: Doesn't Work - delete a specific collection in the library.
-      operationId: DELETEdeleteCollection
+      operationId: deleteCollection
       parameters:
       - name: users_or_groups
         in: path
@@ -2126,8 +2174,12 @@ paths:
         description: Item's current version number
         required: true
         schema:
-          type: integer
-          format: int64
+          type: string
+          # TODO: dart generator messes this up
+          # type: integer
+          # format: int64
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: ok
@@ -2144,7 +2196,7 @@ paths:
       tags:
       - Collections
       description: The set of subcollections within a specific collection in the library.
-      operationId: GETgetSpecificCollectionSubCollections
+      operationId: getSpecificCollectionSubCollections
       parameters:
       - name: users_or_groups
         in: path
@@ -2273,6 +2325,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -2288,7 +2342,7 @@ paths:
       tags:
       - Collections
       description: The set of all items within a specific collection in the library.
-      operationId: GETgetSpecificCollectionItems
+      operationId: getSpecificCollectionItems
       parameters:
       - name: users_or_groups
         in: path
@@ -2417,6 +2471,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -2433,7 +2489,7 @@ paths:
       - Collections
       description: The set of top-level items within a specific collection in the
         library.
-      operationId: GETgetSpecificCollectionTopItems
+      operationId: getSpecificCollectionTopItems
       parameters:
       - name: users_or_groups
         in: path
@@ -2562,6 +2618,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -2577,7 +2635,7 @@ paths:
       tags:
       - Tags
       description: The set of tags within a specific collection in the library.
-      operationId: GETgetSpecificCollectionTags
+      operationId: getSpecificCollectionTags
       parameters:
       - name: users_or_groups
         in: path
@@ -2706,6 +2764,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -2721,7 +2781,7 @@ paths:
       tags:
       - Searches
       description: The set of all saved searches in the library.
-      operationId: GETgetSearches
+      operationId: getSearches
       parameters:
       - name: users_or_groups
         in: path
@@ -2844,6 +2904,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -2858,7 +2920,7 @@ paths:
       tags:
       - Searches
       description: Create a new search.
-      operationId: POSTcreateSearch
+      operationId: createSearch
       parameters:
       - name: users_or_groups
         in: path
@@ -2898,6 +2960,8 @@ paths:
             schema:
               $ref: '#/components/schemas/Search'
         required: false
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -2914,7 +2978,7 @@ paths:
       tags:
       - Searches
       description: A specific saved search in the library.
-      operationId: GETgetSpecificSearch
+      operationId: getSpecificSearch
       parameters:
       - name: users_or_groups
         in: path
@@ -3005,6 +3069,8 @@ paths:
           type: integer
           format: int64
           default: 0
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: OK
@@ -3017,6 +3083,53 @@ paths:
           content: {}
 components:
   schemas:
+    ItemResult: 
+      type: object
+      properties:
+        key: 
+          type: string
+        version:
+          type: integer
+        library:
+          type: object
+          # TODO
+        links:
+          type: object
+          # TODO
+        meta:
+          type: object
+        data:
+          $ref: '#/components/schemas/Item'
+
+    ItemsResult: 
+      type: array
+      items:
+        $ref: '#/components/schemas/ItemResult'
+    Item: 
+      type: object
+      example: |
+        {
+          "key": "",
+          "version": 1,
+          "itemType": "webpage",
+          "title": "",
+          "creators": [
+
+          ],
+            "websiteTitle": "",
+            "websiteType": "",
+            "date": "",
+            "shortTitle": "",
+            "url": "",
+            "accessDate": "",
+            "language": "",
+            "rights": "",
+            "extra": "",
+            "tags": [],
+            "collections": [],
+            "relations": []
+        }
+      additionalProperties: true
     Items:
       type: array
       example: |
@@ -3191,8 +3304,10 @@ components:
       description: Item's current version number
       required: true
       schema:
-        type: integer
-        format: int64
+          type: string
+          # TODO: dart generator messes this up
+          # type: integer
+          # format: int64
     Key:
       name: key
       in: query
@@ -3483,3 +3598,18 @@ components:
           schema:
             $ref: '#/components/schemas/Search'
       required: false
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+#        default: 7f1iVhE5D2GHVkRYwpSszGUA
+      description: The zotero API key. It is a key to which bearer you'll grant
+        permission to write in the user or group library. <a href="https://www.zotero.org/settings/keys"
+        target="blank">This key can be created or found in your settings</a> (it
+        is called "private key").<br/>For the swaggerui user it is 7f1iVhE5D2GHVkRYwpSszGUA
+
+
+  responses:
+    Forbidden:
+      description: Forbidden
+
