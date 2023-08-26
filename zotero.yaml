@@ -32,13 +32,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /itemFields:
     get:
       tags:
@@ -49,13 +49,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /itemTypeFields:
     get:
       tags:
@@ -75,13 +75,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /itemTypeCreatorTypes:
     get:
       tags:
@@ -101,13 +101,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /creatorFields:
     get:
       tags:
@@ -118,13 +118,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /items/new:
     get:
       tags:
@@ -145,13 +145,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /users/{userId}/groups:
     get:
       tags:
@@ -246,13 +246,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /keys/{key}:
     get:
       tags:
@@ -275,13 +275,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/items:
     get:
       tags:
@@ -412,10 +412,10 @@ paths:
                 $ref: '#/components/schemas/ItemsResult'
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
         403:
           $ref: '#/components/responses/Forbidden'
     post:
@@ -476,23 +476,23 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
         409:
           description: 'Conflict: The target library is locked.'
-          content: {}
+          
         412:
           description: 'Precondition Failed: The provided Zotero-Write-Token has already
             been submitted.'
-          content: {}
+          
         413:
           description: 'Request Entity Too Large: Too many items submitted'
-          content: {}
+          
       x-codegen-request-body-name: body
   /{users_or_groups}/{elementId}/items/top:
     get:
@@ -627,13 +627,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/items/trash:
     get:
       tags:
@@ -767,13 +767,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/items/{itemKey}:
     get:
       tags:
@@ -861,13 +861,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
     delete:
       tags:
       - Items
@@ -922,14 +922,14 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         409:
           description: 'Conflict: The target library is locked.'
-          content: {}
+          
         412:
           description: 'Precondition Failed: The item has changed since retrieval
             (i.e., the provided item version no longer matches).'
-          content: {}
+          
     patch:
       tags:
       - Items
@@ -994,17 +994,17 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         400:
           description: 'Bad Request: Invalid type/field; unparseable JSON'
-          content: {}
+          
         409:
           description: 'Conflict: The target library is locked.'
-          content: {}
+          
         412:
           description: 'Precondition Failed: The item has changed since retrieval
             (i.e., the provided item version no longer matches).'
-          content: {}
+          
       x-codegen-request-body-name: body
   /{users_or_groups}/{elementId}/items/{itemKey}/children:
     get:
@@ -1145,13 +1145,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/items/{itemKey}/tags:
     get:
       tags:
@@ -1291,13 +1291,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/tags:
     get:
       tags:
@@ -1431,13 +1431,13 @@ paths:
       responses:
         200:
           description: ok
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/tags/{tagName}:
     get:
       tags:
@@ -1577,13 +1577,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/collections:
     get:
       tags:
@@ -1717,13 +1717,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
     post:
       tags:
       - Collections
@@ -1770,14 +1770,14 @@ paths:
       responses:
         200:
           description: ok
-          content: {}
+          
         409:
           description: 'Conflict: The target library is locked'
-          content: {}
+          
         412:
           description: 'Precondition Failed: The provided Zotero-Write-Token has already
             been submitted.'
-          content: {}
+          
       x-codegen-request-body-name: body
   /{users_or_groups}/{elementId}/collections/top:
     get:
@@ -1912,13 +1912,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/collections/{collectionKey}:
     get:
       tags:
@@ -2058,13 +2058,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
     put:
       tags:
       - Collections
@@ -2120,14 +2120,14 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         409:
           description: 'Conflict: The target library is locked'
-          content: {}
+          
         412:
           description: 'Precondition Failed: The provided Zotero-Write-Token has already
             been submitted.'
-          content: {}
+          
       x-codegen-request-body-name: body
     delete:
       tags:
@@ -2183,14 +2183,14 @@ paths:
       responses:
         200:
           description: ok
-          content: {}
+          
         409:
           description: 'Conflict: The target library is locked'
-          content: {}
+          
         412:
           description: 'Precondition Failed: The provided Zotero-Write-Token has already
             been submitted.'
-          content: {}
+          
   /{users_or_groups}/{elementId}/collections/{collectionKey}/collections:
     get:
       tags:
@@ -2330,13 +2330,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/collections/{collectionKey}/items:
     get:
       tags:
@@ -2476,13 +2476,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/collections/{collectionKey}/items/top:
     get:
       tags:
@@ -2623,13 +2623,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/collections/{collectionKey}/tags:
     get:
       tags:
@@ -2769,13 +2769,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
   /{users_or_groups}/{elementId}/searches:
     get:
       tags:
@@ -2909,13 +2909,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
     post:
       tags:
       - Searches
@@ -2965,13 +2965,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
       x-codegen-request-body-name: body
   /{users_or_groups}/{elementId}/searches/{searchKey}:
     get:
@@ -3074,13 +3074,13 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          
         304:
           description: Not Modified
-          content: {}
+          
         400:
           description: Bad Request
-          content: {}
+          
 components:
   schemas:
     ItemResult: 
