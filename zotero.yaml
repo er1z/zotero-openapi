@@ -307,7 +307,7 @@ paths:
         required: true
         schema:
           type: string
-          default: 2897918
+          default: '2897918'
       - name: format
         in: query
         description: Answer format.
